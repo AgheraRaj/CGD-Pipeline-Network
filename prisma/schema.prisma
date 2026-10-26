@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────── Authentication (Better Auth core tables) ─────────────
+
+model User {
+  id            String   @id
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions      Session[]
+  accounts      Account[]
+  faultReports  FaultReport[]
+  notifications Notification[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ───────────── Fault reporting ─────────────
+
+enum FaultType {
+  GAS_LEAK
+  PIPE_DAMAGE
+  CORROSION
+  EXPOSED_PIPE
+  THIRD_PARTY_DAMAGE
+  OTHER
+}
+
+enum FaultSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum FaultStatus {
+  REPORTED
+  ACKNOWLEDGED
+  IN_PROGRESS
+  RESOLVED
+}
+
+model FaultReport {
+  id             String        @id @default(cuid())
+  title          String
+  description    String?
+  faultType      FaultType
+  severity       FaultSeverity
+  status         FaultStatus   @default(REPORTED)
+
+  // Taken from the device at capture time, never typed in by the user.
+  latitude       Float
+  longitude      Float
+  accuracyMeters Float?
+  capturedAt     DateTime
+
+  reportedById   String
+  reportedBy     User          @relation(fields: [reportedById], references: [id])
+  photos         FaultPhoto[]
+  notifications  Notification[]
+
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("fault_report")
+}
+
+model FaultPhoto {
+  id                 String      @id @default(cuid())
+  faultReportId      String
+  faultReport        FaultReport @relation(fields: [faultReportId], references: [id], onDelete: Cascade)
+  cloudinaryPublicId String      @unique
+  url                String
+  width              Int?
+  height             Int?
+  createdAt          DateTime    @default(now())
+
+  @@index([faultReportId])
+  @@map("fault_photo")
+}
+
+// ───────────── In-app notifications ─────────────
+
+enum NotificationType {
+  FAULT_REPORTED
+  FAULT_STATUS_CHANGED
+}
+
+model Notification {
+  id            String           @id @default(cuid())
+  userId        String
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          NotificationType
+  title         String
+  body          String
+  faultReportId String?
+  faultReport   FaultReport?     @relation(fields: [faultReportId], references: [id], onDelete: Cascade)
+  readAt        DateTime?
+  createdAt     DateTime         @default(now())
+
+  @@index([userId, readAt])
+  @@index([userId, createdAt])
+  @@map("notification")
+}
