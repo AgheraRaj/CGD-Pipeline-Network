@@ -1,3 +1,4 @@
+import { FAULT_REPORT_MAX_LOCATION_AGE_MIN } from "./proximity";
 import {
   ALLOWED_PHOTO_TYPES,
   faultSeverities,
@@ -23,7 +24,8 @@ export type ParseResult =
   | { ok: true; data: FaultFormData }
   | { ok: false; error: string };
 
-const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+// Reports are tied to where the reporter is now, so an old position is not accepted.
+const MAX_LOCATION_AGE_MS = FAULT_REPORT_MAX_LOCATION_AGE_MIN * 60 * 1000;
 const FIVE_MINUTES_MS = 5 * 60 * 1000;
 
 function readText(formData: FormData, name: string) {
@@ -72,13 +74,16 @@ export function parseFaultForm(formData: FormData): ParseResult {
 
   const accuracy = readNumber(formData, "accuracyMeters");
   const accuracyMeters = Number.isFinite(accuracy) && accuracy >= 0 ? accuracy : null;
+  if (accuracyMeters === null) {
+    return { ok: false, error: "The location has no accuracy reading. Update your location and try again." };
+  }
 
   const capturedAt = new Date(readText(formData, "capturedAt"));
   const age = Date.now() - capturedAt.getTime();
-  if (Number.isNaN(capturedAt.getTime()) || age > ONE_DAY_MS || age < -FIVE_MINUTES_MS) {
+  if (Number.isNaN(capturedAt.getTime()) || age > MAX_LOCATION_AGE_MS || age < -FIVE_MINUTES_MS) {
     return {
       ok: false,
-      error: "The captured location is too old or invalid. Update your location and try again.",
+      error: `Your location is more than ${FAULT_REPORT_MAX_LOCATION_AGE_MIN} minutes old or invalid. Update your location and try again.`,
     };
   }
 

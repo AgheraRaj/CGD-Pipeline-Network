@@ -394,6 +394,7 @@ export type PipelineWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Pipeline"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   updatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  faultReports?: Prisma.FaultReportListRelationFilter
 }
 
 export type PipelineOrderByWithRelationInput = {
@@ -423,6 +424,7 @@ export type PipelineOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   createdBy?: Prisma.UserOrderByWithRelationInput
   updatedBy?: Prisma.UserOrderByWithRelationInput
+  faultReports?: Prisma.FaultReportOrderByRelationAggregateInput
 }
 
 export type PipelineWhereUniqueInput = Prisma.AtLeast<{
@@ -455,6 +457,7 @@ export type PipelineWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Pipeline"> | Date | string
   createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   updatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  faultReports?: Prisma.FaultReportListRelationFilter
 }, "id" | "pipelineCode">
 
 export type PipelineOrderByWithAggregationInput = {
@@ -544,6 +547,7 @@ export type PipelineCreateInput = {
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutPipelinesCreatedInput
   updatedBy?: Prisma.UserCreateNestedOneWithoutPipelinesUpdatedInput
+  faultReports?: Prisma.FaultReportCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineUncheckedCreateInput = {
@@ -571,6 +575,7 @@ export type PipelineUncheckedCreateInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineUpdateInput = {
@@ -598,6 +603,7 @@ export type PipelineUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutPipelinesCreatedNestedInput
   updatedBy?: Prisma.UserUpdateOneWithoutPipelinesUpdatedNestedInput
+  faultReports?: Prisma.FaultReportUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineUncheckedUpdateInput = {
@@ -625,6 +631,7 @@ export type PipelineUncheckedUpdateInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineCreateManyInput = {
@@ -714,6 +721,11 @@ export type PipelineListRelationFilter = {
 
 export type PipelineOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type PipelineNullableScalarRelationFilter = {
+  is?: Prisma.PipelineWhereInput | null
+  isNot?: Prisma.PipelineWhereInput | null
 }
 
 export type PipelineCountOrderByAggregateInput = {
@@ -901,6 +913,22 @@ export type PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput = {
   deleteMany?: Prisma.PipelineScalarWhereInput | Prisma.PipelineScalarWhereInput[]
 }
 
+export type PipelineCreateNestedOneWithoutFaultReportsInput = {
+  create?: Prisma.XOR<Prisma.PipelineCreateWithoutFaultReportsInput, Prisma.PipelineUncheckedCreateWithoutFaultReportsInput>
+  connectOrCreate?: Prisma.PipelineCreateOrConnectWithoutFaultReportsInput
+  connect?: Prisma.PipelineWhereUniqueInput
+}
+
+export type PipelineUpdateOneWithoutFaultReportsNestedInput = {
+  create?: Prisma.XOR<Prisma.PipelineCreateWithoutFaultReportsInput, Prisma.PipelineUncheckedCreateWithoutFaultReportsInput>
+  connectOrCreate?: Prisma.PipelineCreateOrConnectWithoutFaultReportsInput
+  upsert?: Prisma.PipelineUpsertWithoutFaultReportsInput
+  disconnect?: Prisma.PipelineWhereInput | boolean
+  delete?: Prisma.PipelineWhereInput | boolean
+  connect?: Prisma.PipelineWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PipelineUpdateToOneWithWhereWithoutFaultReportsInput, Prisma.PipelineUpdateWithoutFaultReportsInput>, Prisma.PipelineUncheckedUpdateWithoutFaultReportsInput>
+}
+
 export type EnumPipelineMaterialFieldUpdateOperationsInput = {
   set?: $Enums.PipelineMaterial
 }
@@ -941,6 +969,7 @@ export type PipelineCreateWithoutCreatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   updatedBy?: Prisma.UserCreateNestedOneWithoutPipelinesUpdatedInput
+  faultReports?: Prisma.FaultReportCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineUncheckedCreateWithoutCreatedByInput = {
@@ -967,6 +996,7 @@ export type PipelineUncheckedCreateWithoutCreatedByInput = {
   updatedById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineCreateOrConnectWithoutCreatedByInput = {
@@ -1003,6 +1033,7 @@ export type PipelineCreateWithoutUpdatedByInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   createdBy?: Prisma.UserCreateNestedOneWithoutPipelinesCreatedInput
+  faultReports?: Prisma.FaultReportCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineUncheckedCreateWithoutUpdatedByInput = {
@@ -1029,6 +1060,7 @@ export type PipelineUncheckedCreateWithoutUpdatedByInput = {
   createdById?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutPipelineInput
 }
 
 export type PipelineCreateOrConnectWithoutUpdatedByInput = {
@@ -1101,6 +1133,130 @@ export type PipelineUpdateWithWhereUniqueWithoutUpdatedByInput = {
 export type PipelineUpdateManyWithWhereWithoutUpdatedByInput = {
   where: Prisma.PipelineScalarWhereInput
   data: Prisma.XOR<Prisma.PipelineUpdateManyMutationInput, Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByInput>
+}
+
+export type PipelineCreateWithoutFaultReportsInput = {
+  id?: string
+  pipelineCode: string
+  name: string
+  description?: string | null
+  material: $Enums.PipelineMaterial
+  pipelineType: $Enums.PipelineType
+  status?: $Enums.PipelineStatus
+  diameterMm: number
+  lengthKm: number
+  depthM: number
+  pressureRatingBar?: number | null
+  gaCode: string
+  installationDate: Date | string
+  flowDirection?: $Enums.PipelineFlowDirection
+  routeDescription?: string | null
+  routeCoordinates: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  startLatitude: number
+  startLongitude: number
+  endLatitude: number
+  endLongitude: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  createdBy?: Prisma.UserCreateNestedOneWithoutPipelinesCreatedInput
+  updatedBy?: Prisma.UserCreateNestedOneWithoutPipelinesUpdatedInput
+}
+
+export type PipelineUncheckedCreateWithoutFaultReportsInput = {
+  id?: string
+  pipelineCode: string
+  name: string
+  description?: string | null
+  material: $Enums.PipelineMaterial
+  pipelineType: $Enums.PipelineType
+  status?: $Enums.PipelineStatus
+  diameterMm: number
+  lengthKm: number
+  depthM: number
+  pressureRatingBar?: number | null
+  gaCode: string
+  installationDate: Date | string
+  flowDirection?: $Enums.PipelineFlowDirection
+  routeDescription?: string | null
+  routeCoordinates: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  startLatitude: number
+  startLongitude: number
+  endLatitude: number
+  endLongitude: number
+  createdById?: string | null
+  updatedById?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type PipelineCreateOrConnectWithoutFaultReportsInput = {
+  where: Prisma.PipelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.PipelineCreateWithoutFaultReportsInput, Prisma.PipelineUncheckedCreateWithoutFaultReportsInput>
+}
+
+export type PipelineUpsertWithoutFaultReportsInput = {
+  update: Prisma.XOR<Prisma.PipelineUpdateWithoutFaultReportsInput, Prisma.PipelineUncheckedUpdateWithoutFaultReportsInput>
+  create: Prisma.XOR<Prisma.PipelineCreateWithoutFaultReportsInput, Prisma.PipelineUncheckedCreateWithoutFaultReportsInput>
+  where?: Prisma.PipelineWhereInput
+}
+
+export type PipelineUpdateToOneWithWhereWithoutFaultReportsInput = {
+  where?: Prisma.PipelineWhereInput
+  data: Prisma.XOR<Prisma.PipelineUpdateWithoutFaultReportsInput, Prisma.PipelineUncheckedUpdateWithoutFaultReportsInput>
+}
+
+export type PipelineUpdateWithoutFaultReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pipelineCode?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  material?: Prisma.EnumPipelineMaterialFieldUpdateOperationsInput | $Enums.PipelineMaterial
+  pipelineType?: Prisma.EnumPipelineTypeFieldUpdateOperationsInput | $Enums.PipelineType
+  status?: Prisma.EnumPipelineStatusFieldUpdateOperationsInput | $Enums.PipelineStatus
+  diameterMm?: Prisma.FloatFieldUpdateOperationsInput | number
+  lengthKm?: Prisma.FloatFieldUpdateOperationsInput | number
+  depthM?: Prisma.FloatFieldUpdateOperationsInput | number
+  pressureRatingBar?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gaCode?: Prisma.StringFieldUpdateOperationsInput | string
+  installationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  flowDirection?: Prisma.EnumPipelineFlowDirectionFieldUpdateOperationsInput | $Enums.PipelineFlowDirection
+  routeDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeCoordinates?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  startLatitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  startLongitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  endLatitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  endLongitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdBy?: Prisma.UserUpdateOneWithoutPipelinesCreatedNestedInput
+  updatedBy?: Prisma.UserUpdateOneWithoutPipelinesUpdatedNestedInput
+}
+
+export type PipelineUncheckedUpdateWithoutFaultReportsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pipelineCode?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  material?: Prisma.EnumPipelineMaterialFieldUpdateOperationsInput | $Enums.PipelineMaterial
+  pipelineType?: Prisma.EnumPipelineTypeFieldUpdateOperationsInput | $Enums.PipelineType
+  status?: Prisma.EnumPipelineStatusFieldUpdateOperationsInput | $Enums.PipelineStatus
+  diameterMm?: Prisma.FloatFieldUpdateOperationsInput | number
+  lengthKm?: Prisma.FloatFieldUpdateOperationsInput | number
+  depthM?: Prisma.FloatFieldUpdateOperationsInput | number
+  pressureRatingBar?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  gaCode?: Prisma.StringFieldUpdateOperationsInput | string
+  installationDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  flowDirection?: Prisma.EnumPipelineFlowDirectionFieldUpdateOperationsInput | $Enums.PipelineFlowDirection
+  routeDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  routeCoordinates?: Prisma.JsonNullValueInput | runtime.InputJsonValue
+  startLatitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  startLongitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  endLatitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  endLongitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type PipelineCreateManyCreatedByInput = {
@@ -1179,6 +1335,7 @@ export type PipelineUpdateWithoutCreatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedBy?: Prisma.UserUpdateOneWithoutPipelinesUpdatedNestedInput
+  faultReports?: Prisma.FaultReportUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineUncheckedUpdateWithoutCreatedByInput = {
@@ -1205,6 +1362,7 @@ export type PipelineUncheckedUpdateWithoutCreatedByInput = {
   updatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineUncheckedUpdateManyWithoutCreatedByInput = {
@@ -1257,6 +1415,7 @@ export type PipelineUpdateWithoutUpdatedByInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdBy?: Prisma.UserUpdateOneWithoutPipelinesCreatedNestedInput
+  faultReports?: Prisma.FaultReportUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineUncheckedUpdateWithoutUpdatedByInput = {
@@ -1283,6 +1442,7 @@ export type PipelineUncheckedUpdateWithoutUpdatedByInput = {
   createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutPipelineNestedInput
 }
 
 export type PipelineUncheckedUpdateManyWithoutUpdatedByInput = {
@@ -1312,6 +1472,35 @@ export type PipelineUncheckedUpdateManyWithoutUpdatedByInput = {
 }
 
 
+/**
+ * Count Type PipelineCountOutputType
+ */
+
+export type PipelineCountOutputType = {
+  faultReports: number
+}
+
+export type PipelineCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  faultReports?: boolean | PipelineCountOutputTypeCountFaultReportsArgs
+}
+
+/**
+ * PipelineCountOutputType without action
+ */
+export type PipelineCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PipelineCountOutputType
+   */
+  select?: Prisma.PipelineCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * PipelineCountOutputType without action
+ */
+export type PipelineCountOutputTypeCountFaultReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FaultReportWhereInput
+}
+
 
 export type PipelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1340,6 +1529,8 @@ export type PipelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   createdBy?: boolean | Prisma.Pipeline$createdByArgs<ExtArgs>
   updatedBy?: boolean | Prisma.Pipeline$updatedByArgs<ExtArgs>
+  faultReports?: boolean | Prisma.Pipeline$faultReportsArgs<ExtArgs>
+  _count?: boolean | Prisma.PipelineCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pipeline"]>
 
 export type PipelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1431,6 +1622,8 @@ export type PipelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type PipelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.Pipeline$createdByArgs<ExtArgs>
   updatedBy?: boolean | Prisma.Pipeline$updatedByArgs<ExtArgs>
+  faultReports?: boolean | Prisma.Pipeline$faultReportsArgs<ExtArgs>
+  _count?: boolean | Prisma.PipelineCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PipelineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   createdBy?: boolean | Prisma.Pipeline$createdByArgs<ExtArgs>
@@ -1446,6 +1639,7 @@ export type $PipelinePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     createdBy: Prisma.$UserPayload<ExtArgs> | null
     updatedBy: Prisma.$UserPayload<ExtArgs> | null
+    faultReports: Prisma.$FaultReportPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1868,6 +2062,7 @@ export interface Prisma__PipelineClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   createdBy<T extends Prisma.Pipeline$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pipeline$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   updatedBy<T extends Prisma.Pipeline$updatedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pipeline$updatedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  faultReports<T extends Prisma.Pipeline$faultReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Pipeline$faultReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FaultReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2357,6 +2552,30 @@ export type Pipeline$updatedByArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Pipeline.faultReports
+ */
+export type Pipeline$faultReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FaultReport
+   */
+  select?: Prisma.FaultReportSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FaultReport
+   */
+  omit?: Prisma.FaultReportOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FaultReportInclude<ExtArgs> | null
+  where?: Prisma.FaultReportWhereInput
+  orderBy?: Prisma.FaultReportOrderByWithRelationInput | Prisma.FaultReportOrderByWithRelationInput[]
+  cursor?: Prisma.FaultReportWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FaultReportScalarFieldEnum | Prisma.FaultReportScalarFieldEnum[]
 }
 
 /**

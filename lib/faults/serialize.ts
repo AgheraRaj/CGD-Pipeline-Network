@@ -25,5 +25,16 @@ export function toFaultDto(report: FaultReportWithRelations): FaultReportDto {
     createdAt: report.createdAt.toISOString(),
     reportedByName: report.reportedBy.name,
     photoUrl: report.photos[0]?.url ?? null,
+    nearestPipeline:
+      report.nearestPipelineCode && report.nearestPipelineKind
+        ? {
+            kind: report.nearestPipelineKind,
+            ref: report.nearestPipelineRef,
+            code: report.nearestPipelineCode,
+            name: report.nearestPipelineName ?? report.nearestPipelineCode,
+            distanceM: report.distanceToPipelineM,
+            pipelineId: report.pipelineId,
+          }
+        : null,
   };
 }

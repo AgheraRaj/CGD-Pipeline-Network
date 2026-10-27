@@ -14,13 +14,24 @@ import { useTheme } from "next-themes";
 import { useEffect, useRef, useState } from "react";
 import { buildFaultGeoJson } from "@/lib/faults/geojson";
 import type { FaultReportDto } from "@/lib/faults/types";
-import { getAssetDetails, type AssetDetails } from "@/lib/network/asset-details";
+import {
+  getAssetDetails,
+  getConsumerDetails,
+  type AssetDetails,
+} from "@/lib/network/asset-details";
 import {
   ALL_AREAS,
   buildNetworkGeoJson,
   getSelectionBounds,
 } from "@/lib/network/dummy-data";
+import type { DeviceLocation } from "@/hooks/use-device-location";
+import {
+  CONNECTION_STATUS_LABELS,
+  getConsumerName,
+  type ConsumerConnectionResult,
+} from "@/lib/network/connections";
 import { buildFlowGeoJson, type FlowKind } from "@/lib/network/flow";
+import { circlePolygon } from "@/lib/network/geo-shapes";
 import { configureMapLibreWorker, getMapStyleUrl } from "@/lib/network/map-styles";
 import {
   GA_BOUNDARY_COLOR,
@@ -48,6 +59,7 @@ const LAYER_GROUPS: Record<NetworkLayerId, string[]> = {
     "pipelines-hit",
   ],
   flow: ["flow-pulse", "flow-arrows"],
+  connections: ["connections-line", "connections-tap", "connections-hit"],
   cgs: ["cgs-halo", "cgs"],
   industrial: ["industrial-clusters", "industrial-count", "industrial-points"],
   faults: ["faults-halo", "faults"],
@@ -57,6 +69,7 @@ const CLICKABLE_LAYER_IDS = [
   "steel-hit",
   "mdpe-hit",
   "pipelines-hit",
+  "connections-hit",
   "cgs",
   "industrial-points",
   "faults",
@@ -104,6 +117,8 @@ type NetworkMapProps = {
   faults: FaultReportDto[];
   pipelines: PipelineDto[];
   selectedPipelineId: string | null;
+  connections: ConsumerConnectionResult;
+  userLocation: DeviceLocation | null;
   focusRequest: {
     id: string;
     longitude: number;
@@ -303,6 +318,125 @@ function addFlowLayers(
     },
     before
   );
+}
+
+// Service connections from each industrial consumer to the line that supplies it: a
+// dotted violet line (consumers are violet) ending in a small tap point on the main.
+// Dotted keeps them apart from solid pipelines and dashed boundaries or planned lines.
+const CONNECTION_COLOR = "#8b5cf6";
+const CONNECTION_INTERRUPTED_COLOR = "#f59e0b";
+const CONNECTIONS_MIN_ZOOM = 14; // consumers stop clustering above zoom 13
+
+function addConnectionLayers(
+  map: MapLibreMap,
+  connections: ConsumerConnectionResult,
+  beforeLayerId?: string
+) {
+  if (map.getSource("connections")) return;
+  map.addSource("connections", { type: "geojson", data: connections.lines });
+  map.addSource("connection-taps", { type: "geojson", data: connections.tapPoints });
+  const before = beforeLayerId && map.getLayer(beforeLayerId) ? beforeLayerId : undefined;
+  const color: ExpressionSpecification = [
+    "case",
+    ["==", ["get", "status"], "SUPPLY_INTERRUPTED"],
+    CONNECTION_INTERRUPTED_COLOR,
+    CONNECTION_COLOR,
+  ];
+
+  map.addLayer(
+    {
+      id: "connections-line",
+      type: "line",
+      source: "connections",
+      minzoom: CONNECTIONS_MIN_ZOOM,
+      layout: { "line-cap": "round", "line-join": "round" },
+      paint: {
+        "line-color": color,
+        "line-width": 1.5,
+        "line-opacity": 0.75,
+        "line-dasharray": [0.2, 2],
+      },
+    },
+    before
+  );
+  map.addLayer(
+    {
+      id: "connections-tap",
+      type: "circle",
+      source: "connection-taps",
+      minzoom: CONNECTIONS_MIN_ZOOM + 1,
+      paint: {
+        "circle-color": color,
+        "circle-radius": 3,
+        "circle-stroke-color": "#ffffff",
+        "circle-stroke-width": 1.5,
+      },
+    },
+    before
+  );
+  map.addLayer(
+    {
+      id: "connections-hit",
+      type: "line",
+      source: "connections",
+      minzoom: CONNECTIONS_MIN_ZOOM,
+      paint: { "line-color": "#000000", "line-opacity": 0, "line-width": 10 },
+    },
+    before
+  );
+}
+
+// Your position while reporting a fault: a blue dot with its GPS accuracy around it.
+const USER_LOCATION_COLOR = "#2563eb";
+
+function buildUserLocationData(location: DeviceLocation | null) {
+  if (!location) {
+    return {
+      point: { type: "FeatureCollection" as const, features: [] },
+      accuracy: { type: "FeatureCollection" as const, features: [] },
+    };
+  }
+  const position: LngLat = [location.longitude, location.latitude];
+  return {
+    point: {
+      type: "FeatureCollection" as const,
+      features: [
+        {
+          type: "Feature" as const,
+          properties: {},
+          geometry: { type: "Point" as const, coordinates: position },
+        },
+      ],
+    },
+    accuracy: {
+      type: "FeatureCollection" as const,
+      features: [circlePolygon(position, location.accuracyMeters)],
+    },
+  };
+}
+
+function addUserLocationLayers(map: MapLibreMap, location: DeviceLocation | null) {
+  if (map.getSource("user-location")) return;
+  const data = buildUserLocationData(location);
+  map.addSource("user-accuracy", { type: "geojson", data: data.accuracy });
+  map.addSource("user-location", { type: "geojson", data: data.point });
+  map.addLayer({
+    id: "user-accuracy",
+    type: "fill",
+    source: "user-accuracy",
+    paint: { "fill-color": USER_LOCATION_COLOR, "fill-opacity": 0.12 },
+  });
+  map.addLayer({
+    id: "user-location",
+    type: "circle",
+    source: "user-location",
+    paint: {
+      "circle-color": USER_LOCATION_COLOR,
+      "circle-radius": 7,
+      "circle-stroke-color": "#ffffff",
+      "circle-stroke-width": 2.5,
+    },
+  });
 }
 
 function addNetworkLayers(
@@ -512,6 +646,8 @@ export function NetworkMap({
   faults,
   pipelines,
   selectedPipelineId,
+  connections,
+  userLocation,
   focusRequest,
   onSelectAsset,
 }: NetworkMapProps) {
@@ -529,6 +665,16 @@ export function NetworkMap({
   const faultsRef = useRef(faults);
   const pipelinesRef = useRef(pipelines);
   const selectedPipelineIdRef = useRef(selectedPipelineId);
+  const connectionsRef = useRef(connections);
+  const userLocationRef = useRef(userLocation);
+  // Consumer details by ID, for hover and click (MapLibre only returns tile copies).
+  const consumerByIdRef = useRef(new Map<string, { gaCode: string; loadScmh: number }>());
+  const [hoverTooltip, setHoverTooltip] = useState<{
+    x: number;
+    y: number;
+    title: string;
+    detail: string;
+  } | null>(null);
   const isDarkRef = useRef(resolvedTheme === "dark");
   const onSelectAssetRef = useRef(onSelectAsset);
 
@@ -561,6 +707,12 @@ export function NetworkMap({
     mapRef.current = map;
     currentStyleRef.current = styleUrl;
     networkDataRef.current = buildNetworkGeoJson();
+    consumerByIdRef.current = new Map(
+      networkDataRef.current.consumers.features.map((feature) => [
+        feature.properties.id,
+        { gaCode: feature.properties.gaCode, loadScmh: feature.properties.loadScmh },
+      ])
+    );
 
     // The free basemap style refers to a few icons that are not in its sprite sheet.
     // Supplying a blank pixel removes the console warning and changes nothing visible.
@@ -588,6 +740,10 @@ export function NetworkMap({
         isDarkRef.current,
         selectedPipelineIdRef.current
       );
+      // Connections go under the consumer points; your location goes on top of everything.
+      addConnectionLayers(map, connectionsRef.current, "industrial-clusters");
+      addUserLocationLayers(map, userLocationRef.current);
+      applyLayerVisibility(map, visibleLayersRef.current);
     });
 
     // Show a readable message if the basemap or the browser's WebGL fails before the first render.
@@ -604,6 +760,30 @@ export function NetworkMap({
       map.on("click", layerId, (event) => {
         const feature = event.features?.[0];
         if (!feature) return;
+        if (layerId === "industrial-points" || layerId === "connections-hit") {
+          const id = String(feature.properties?.id ?? feature.properties?.consumerId);
+          const coordinates =
+            layerId === "industrial-points" && feature.geometry.type === "Point"
+              ? feature.geometry.coordinates
+              : feature.geometry.type === "LineString"
+                ? feature.geometry.coordinates[0]
+                : null;
+          const connection = connectionsRef.current.byConsumerId.get(id) ?? null;
+          const consumer = consumerByIdRef.current.get(id);
+          onSelectAssetRef.current(
+            getConsumerDetails(
+              {
+                ...(consumer ?? feature.properties),
+                id,
+                gaCode: consumer?.gaCode ?? connection?.gaCode,
+                longitude: coordinates?.[0],
+                latitude: coordinates?.[1],
+              },
+              connection
+            )
+          );
+          return;
+        }
         onSelectAssetRef.current(getAssetDetails(layerId, feature.properties));
       });
       map.on("mouseenter", layerId, () => {
@@ -612,6 +792,26 @@ export function NetworkMap({
       map.on("mouseleave", layerId, () => {
         map.getCanvas().style.cursor = "";
       });
+    }
+
+    // Hovering a consumer or its connection shows where it is supplied from.
+    for (const layerId of ["industrial-points", "connections-hit"]) {
+      map.on("mousemove", layerId, (event) => {
+        const feature = event.features?.[0];
+        if (!feature) return;
+        const id = String(feature.properties?.id ?? feature.properties?.consumerId);
+        const connection = connectionsRef.current.byConsumerId.get(id);
+        const consumer = consumerByIdRef.current.get(id);
+        const name = getConsumerName(id, consumer?.gaCode ?? connection?.gaCode ?? "");
+        const detail =
+          connection && connection.status !== "NOT_CONNECTED"
+            ? `Service line to ${connection.lineCode} · ${connection.distanceM} m${
+                connection.status === "SUPPLY_INTERRUPTED" ? " · line under maintenance" : ""
+              }`
+            : CONNECTION_STATUS_LABELS.NOT_CONNECTED;
+        setHoverTooltip({ x: event.point.x, y: event.point.y, title: name, detail });
+      });
+      map.on("mouseleave", layerId, () => setHoverTooltip(null));
     }
 
     // Clicking a cluster zooms in to break it apart.
@@ -694,6 +894,38 @@ export function NetworkMap({
     }
   }, [pipelines]);
 
+  // Redraw consumer connections whenever pipelines change.
+  useEffect(() => {
+    connectionsRef.current = connections;
+    const map = mapRef.current;
+    if (!map) return;
+    const lines = map.getSource("connections") as GeoJSONSource | undefined;
+    const taps = map.getSource("connection-taps") as GeoJSONSource | undefined;
+    if (lines && taps) {
+      lines.setData(connections.lines);
+      taps.setData(connections.tapPoints);
+    } else if (map.getSource("areas")) {
+      addConnectionLayers(map, connections, "industrial-clusters");
+      applyLayerVisibility(map, visibleLayersRef.current);
+    }
+  }, [connections]);
+
+  // Show (or move) your position while you report a fault.
+  useEffect(() => {
+    userLocationRef.current = userLocation;
+    const map = mapRef.current;
+    if (!map) return;
+    const data = buildUserLocationData(userLocation);
+    const point = map.getSource("user-location") as GeoJSONSource | undefined;
+    const accuracy = map.getSource("user-accuracy") as GeoJSONSource | undefined;
+    if (point && accuracy) {
+      point.setData(data.point);
+      accuracy.setData(data.accuracy);
+    } else if (map.getSource("areas")) {
+      addUserLocationLayers(map, userLocation);
+    }
+  }, [userLocation]);
+
   // Animate the flow dashes. Runs at a modest frame rate, pauses while the tab is hidden
   // or the flow layer is off, and is skipped entirely for people who prefer less motion.
   useEffect(() => {
@@ -766,6 +998,16 @@ export function NetworkMap({
       <div className="absolute inset-0">
         <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
       </div>
+      {hoverTooltip ? (
+        <div
+          role="tooltip"
+          className="bg-foreground text-background pointer-events-none absolute z-20 max-w-64 rounded-md px-2.5 py-1.5 text-xs shadow-md"
+          style={{ left: hoverTooltip.x + 14, top: hoverTooltip.y + 14 }}
+        >
+          <div className="font-medium">{hoverTooltip.title}</div>
+          <div className="opacity-80">{hoverTooltip.detail}</div>
+        </div>
+      ) : null}
       {loadError ? (
         <div className="bg-background/90 absolute inset-0 z-20 flex flex-col items-center justify-center gap-1 p-6 text-center">
           <p className="text-sm font-medium">The map could not be loaded</p>

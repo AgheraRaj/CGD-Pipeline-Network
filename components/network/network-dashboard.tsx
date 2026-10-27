@@ -21,7 +21,14 @@ import {
   getPipelineDetails,
   type AssetDetails,
 } from "@/lib/network/asset-details";
-import { ALL_AREAS, getNetworkSummary } from "@/lib/network/dummy-data";
+import type { DeviceLocation } from "@/hooks/use-device-location";
+import { buildConsumerConnections } from "@/lib/network/connections";
+import {
+  ALL_AREAS,
+  getIndustrialConsumers,
+  getNetworkSummary,
+  pipelineRoutes,
+} from "@/lib/network/dummy-data";
 import { getBounds } from "@/lib/network/geo";
 import type { LngLat, NetworkLayerId } from "@/lib/network/types";
 import { getPipelineSummary } from "@/lib/pipelines/summary";
@@ -38,6 +45,7 @@ const initialVisibleLayers: Record<NetworkLayerId, boolean> = {
   mdpe: true,
   pipelines: true,
   flow: true,
+  connections: true,
   cgs: true,
   industrial: true,
   faults: true,
@@ -84,6 +92,19 @@ export function NetworkDashboard() {
     () => getPipelineSummary(pipelines, selection),
     [pipelines, selection]
   );
+  // Which line supplies each industrial consumer. Recalculated when pipelines change.
+  const connections = useMemo(
+    () => buildConsumerConnections(getIndustrialConsumers(), pipelineRoutes, pipelines),
+    [pipelines]
+  );
+  const connectedConsumerCount = useMemo(() => {
+    const counts = Object.entries(connections.summary)
+      .filter(([code]) => selection === ALL_AREAS || code === selection)
+      .map(([, area]) => area.connected + area.interrupted);
+    return counts.reduce((total, count) => total + count, 0);
+  }, [connections, selection]);
+  const [userLocation, setUserLocation] = useState<DeviceLocation | null>(null);
+
   const openFaultCount = useMemo(
     () => faults.filter((fault) => fault.status !== "RESOLVED").length,
     [faults]
@@ -144,6 +165,7 @@ export function NetworkDashboard() {
         onLayerToggle={handleLayerToggle}
         summary={summary}
         pipelineSummary={pipelineSummary}
+        connectedConsumerCount={connectedConsumerCount}
         openFaultCount={openFaultCount}
       />
 
@@ -154,20 +176,24 @@ export function NetworkDashboard() {
           faults={faults}
           pipelines={pipelines}
           selectedPipelineId={selectedPipeline?.id ?? null}
+          connections={connections}
+          userLocation={userLocation}
           focusRequest={focusRequest}
           onSelectAsset={setSelectedAsset}
         />
 
-        <div className="absolute top-3 left-3 right-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-start justify-between gap-2">
+        <div className="absolute top-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-start gap-2">
           <NetworkStatsBar summary={summary} pipelineSummary={pipelineSummary} />
-          <div className="flex items-center gap-2">
-            <Button size="sm" variant="secondary" className="shadow-sm" onClick={openAddPipeline}>
+          <Button size="sm" variant="secondary" className="shadow-sm" onClick={openAddPipeline}>
             <Plus className="size-4" />
             Add pipeline
           </Button>
-          <ReportFaultDialog onReported={addFault} onViewOnMap={handleViewFaultOnMap} />
-          </div>
-          
+          <ReportFaultDialog
+            pipelines={pipelines}
+            onLocation={setUserLocation}
+            onReported={addFault}
+            onViewOnMap={handleViewFaultOnMap}
+          />
         </div>
 
         {displayedAsset ? (

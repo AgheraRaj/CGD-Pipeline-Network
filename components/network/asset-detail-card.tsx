@@ -54,6 +54,8 @@ export function AssetDetailCard({ asset, onClose, actions }: AssetDetailCardProp
             <dd className="flex items-center gap-1.5 text-right font-mono text-xs font-medium">
               {row.tone === "ok" ? (
                 <span className="size-1.5 rounded-full bg-emerald-500" />
+              ) : row.tone === "warn" ? (
+                <span className="size-1.5 rounded-full bg-amber-500" />
               ) : null}
               {row.value}
             </dd>

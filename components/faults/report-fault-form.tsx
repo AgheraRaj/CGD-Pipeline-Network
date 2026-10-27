@@ -1,24 +1,55 @@
 "use client";
 
-import { Camera, CheckCircle2, ImagePlus, LoaderCircle, MapPin } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  Camera,
+  CheckCircle2,
+  ImagePlus,
+  LoaderCircle,
+  LocateFixed,
+  MapPin,
+  MapPinOff,
+} from "lucide-react";
+import dynamic from "next/dynamic";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
-import { useDeviceLocation, type DeviceLocationState } from "@/hooks/use-device-location";
+import {
+  useDeviceLocation,
+  type DeviceLocation,
+  type DeviceLocationState,
+} from "@/hooks/use-device-location";
 import {
   faultSeverities,
   faultTypes,
   type FaultSeverityValue,
   type FaultTypeValue,
 } from "@/lib/faults/constants";
+import {
+  checkFaultProximity,
+  FAULT_REPORT_MAX_DISTANCE_M,
+  formatDistance,
+  NEAREST_PIPELINE_KIND_LABELS,
+  type ProximityCheck,
+} from "@/lib/faults/proximity";
 import type { FaultReportDto } from "@/lib/faults/types";
 import { compressImage } from "@/lib/image/compress-image";
+import type { PipelineDto } from "@/lib/pipelines/types";
+
+// MapLibre needs the browser, so it is loaded on the client only.
+const FaultLocationMap = dynamic(
+  () => import("@/components/faults/fault-location-map").then((module) => module.FaultLocationMap),
+  { ssr: false, loading: () => <Skeleton className="h-48 rounded-lg" /> }
+);
 
 type ReportFaultFormProps = {
+  // Registered pipelines, checked together with the network's steel and MDPE lines.
+  pipelines: PipelineDto[];
+  onLocation?: (location: DeviceLocation) => void;
   onReported: (fault: FaultReportDto) => void;
   onViewOnMap: (fault: FaultReportDto) => void;
   onClose: () => void;
@@ -30,7 +61,6 @@ type SubmitState =
   | { status: "error"; message: string }
   | { status: "success"; fault: FaultReportDto; notifiedCount: number };
 
-const LOW_ACCURACY_METERS = 100;
 
 function ChoiceChips<T extends string>({
   label,
@@ -69,23 +99,34 @@ function ChoiceChips<T extends string>({
 
 function LocationStatus({
   state,
-  onRetry,
+  proximity,
+  pipelines,
+  onRequest,
 }: {
   state: DeviceLocationState;
-  onRetry: () => void;
+  proximity: ProximityCheck | null;
+  pipelines: PipelineDto[];
+  onRequest: () => void;
 }) {
   if (state.status === "idle") {
     return (
-      <p className="text-muted-foreground text-xs">
-        Your location is captured automatically when you add a photograph. You
-        never need to type coordinates.
-      </p>
+      <div className="flex flex-col items-start gap-2">
+        <p className="text-muted-foreground text-sm">
+          Faults are reported from where you stand. Allow location access so we can check
+          that you are within {formatDistance(FAULT_REPORT_MAX_DISTANCE_M)} of a pipeline.
+          You never type coordinates.
+        </p>
+        <Button type="button" size="sm" onClick={onRequest}>
+          <LocateFixed className="size-4" />
+          Check my location
+        </Button>
+      </div>
     );
   }
 
   if (state.status === "requesting") {
     return (
-      <div className="text-muted-foreground flex items-center gap-2 text-sm">
+      <div className="text-muted-foreground flex items-center gap-2 text-sm" role="status">
         <LoaderCircle className="size-4 animate-spin" />
         Getting your location… allow access if your browser asks.
       </div>
@@ -95,9 +136,10 @@ function LocationStatus({
   if (state.status === "error") {
     return (
       <Alert variant="destructive">
+        <MapPinOff />
         <AlertDescription className="flex flex-col items-start gap-2">
           {state.message}
-          <Button type="button" size="sm" variant="outline" onClick={onRetry}>
+          <Button type="button" size="sm" variant="outline" onClick={onRequest}>
             Try again
           </Button>
         </AlertDescription>
@@ -105,32 +147,69 @@ function LocationStatus({
     );
   }
 
-  const { latitude, longitude, accuracyMeters } = state.location;
-  const isLowAccuracy = accuracyMeters > LOW_ACCURACY_METERS;
+  const { location } = state;
+  const nearest = proximity?.nearest ?? null;
 
   return (
-    <div className="flex flex-col gap-2 text-sm">
+    <div className="flex flex-col gap-3 text-sm">
       <div className="flex flex-wrap items-center gap-2">
-        <MapPin className="size-4 text-emerald-500" />
+        <MapPin className="size-4 text-blue-600" />
         <span className="font-mono text-xs">
-          {latitude.toFixed(5)}, {longitude.toFixed(5)}
+          {location.latitude.toFixed(5)}, {location.longitude.toFixed(5)}
         </span>
-        <Badge variant="secondary">±{Math.round(accuracyMeters)} m</Badge>
-        <Button type="button" size="sm" variant="ghost" className="ml-auto" onClick={onRetry}>
-          Update location
+        <Badge variant="secondary">±{Math.round(location.accuracyMeters)} m</Badge>
+        <Button
+          type="button"
+          size="sm"
+          variant="ghost"
+          className="ml-auto"
+          onClick={onRequest}
+          disabled={state.isRefreshing}
+        >
+          {state.isRefreshing ? <LoaderCircle className="size-4 animate-spin" /> : null}
+          {state.isRefreshing ? "Updating…" : "Update location"}
         </Button>
       </div>
-      {isLowAccuracy ? (
-        <p className="text-xs text-amber-600 dark:text-amber-400">
-          The location is not very precise. Move to open sky, wait a moment and
-          tap Update location for a better fix.
-        </p>
+
+      <FaultLocationMap
+        location={location}
+        nearest={nearest}
+        maxDistanceMeters={FAULT_REPORT_MAX_DISTANCE_M}
+        isWithinRange={proximity?.ok ?? false}
+        pipelines={pipelines}
+      />
+      <p className="text-muted-foreground text-xs">
+        Blue dot: you (shaded area is GPS accuracy). Dotted ring: reporting range. The
+        nearest pipeline is drawn thicker.
+      </p>
+
+      {proximity?.ok ? (
+        <Alert>
+          <CheckCircle2 className="text-emerald-500" />
+          <AlertDescription>
+            You are {formatDistance(proximity.nearest.distanceM)} from{" "}
+            <span className="text-foreground font-medium">{proximity.nearest.code}</span> (
+            {NEAREST_PIPELINE_KIND_LABELS[proximity.nearest.kind]} · {proximity.nearest.name}). This
+            pipeline is attached to your report.
+          </AlertDescription>
+        </Alert>
+      ) : proximity ? (
+        <Alert variant="destructive">
+          <MapPinOff />
+          <AlertDescription>{proximity.message}</AlertDescription>
+        </Alert>
       ) : null}
     </div>
   );
 }
 
-export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaultFormProps) {
+export function ReportFaultForm({
+  pipelines,
+  onLocation,
+  onReported,
+  onViewOnMap,
+  onClose,
+}: ReportFaultFormProps) {
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
 
@@ -144,7 +223,22 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
   const [description, setDescription] = useState("");
   const [submitState, setSubmitState] = useState<SubmitState>({ status: "idle" });
 
-  const { state: locationState, request: requestLocation } = useDeviceLocation();
+  const { state: locationState, request: requestLocation } = useDeviceLocation({ onLocation });
+
+  // The same rule the server enforces, run here so the reporter knows straight away.
+  const proximity = useMemo(
+    () =>
+      locationState.status === "success"
+        ? checkFaultProximity(
+            locationState.location.longitude,
+            locationState.location.latitude,
+            locationState.location.accuracyMeters,
+            pipelines
+          )
+        : null,
+    [locationState, pipelines]
+  );
+  const isNearPipeline = proximity?.ok === true;
 
   // Release the preview image when it is replaced or the dialog closes.
   useEffect(() => {
@@ -161,7 +255,7 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
 
     setPhotoError(null);
     setIsPreparingPhoto(true);
-    requestLocation(); // asked at the moment the photograph is added
+    requestLocation(); // refreshed when the photograph is added, so the time is current
 
     try {
       const compressed = await compressImage(selectedFile);
@@ -178,13 +272,14 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
   const canSubmit =
     photo !== null &&
     locationState.status === "success" &&
+    isNearPipeline &&
     title.trim().length >= 3 &&
     !isSubmitting &&
     !isPreparingPhoto;
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!photo || locationState.status !== "success") return;
+    if (!photo || locationState.status !== "success" || !isNearPipeline) return;
 
     setSubmitState({ status: "submitting" });
     const { latitude, longitude, accuracyMeters, capturedAt } = locationState.location;
@@ -234,7 +329,10 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
         <div>
           <p className="font-semibold">Fault reported</p>
           <p className="text-muted-foreground mt-1 text-sm">
-            The location was saved and{" "}
+            {fault.nearestPipeline
+              ? `Linked to ${fault.nearestPipeline.code}, ${formatDistance(fault.nearestPipeline.distanceM ?? 0)} away. `
+              : null}
+            It is marked as reported and awaits review. The location was saved and{" "}
             {notifiedCount > 0
               ? `${notifiedCount} ${notifiedCount === 1 ? "colleague was" : "colleagues were"} notified.`
               : "there are no other users to notify yet."}
@@ -254,6 +352,29 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+      {/* Step 1: location and proximity check */}
+      <div className="flex flex-col gap-2 rounded-lg border p-3">
+        <Label>1. Your location</Label>
+        <LocationStatus
+          state={locationState}
+          proximity={proximity}
+          pipelines={pipelines}
+          onRequest={requestLocation}
+        />
+      </div>
+
+      {/* Step 2: the report itself, available once you are near a pipeline */}
+      <fieldset
+        disabled={!isNearPipeline || isSubmitting}
+        className="flex flex-col gap-5 disabled:opacity-50"
+        aria-describedby={!isNearPipeline ? "fault-locked-hint" : undefined}
+      >
+      {!isNearPipeline ? (
+        <p id="fault-locked-hint" className="text-muted-foreground text-xs">
+          2. Fault details unlock once your location is confirmed within{" "}
+          {formatDistance(FAULT_REPORT_MAX_DISTANCE_M)} of a pipeline.
+        </p>
+      ) : null}
       {/* Photograph */}
       <div className="flex flex-col gap-2">
         <Label>Photograph</Label>
@@ -311,15 +432,6 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
         {photoError ? <p className="text-destructive text-xs">{photoError}</p> : null}
       </div>
 
-      {/* Location */}
-      <div className="flex flex-col gap-2 rounded-lg border p-3">
-        <Label>Location</Label>
-        <LocationStatus state={locationState} onRetry={requestLocation} />
-        <p className="text-muted-foreground text-xs">
-          This is your position right now, so report the fault while you are at the site.
-        </p>
-      </div>
-
       {/* Details */}
       <div className="flex flex-col gap-2">
         <Label htmlFor="fault-title">Short title</Label>
@@ -361,6 +473,8 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
         />
       </div>
 
+      </fieldset>
+
       {submitState.status === "error" ? (
         <Alert variant="destructive">
           <AlertDescription>{submitState.message}</AlertDescription>
@@ -379,7 +493,9 @@ export function ReportFaultForm({ onReported, onViewOnMap, onClose }: ReportFaul
       </Button>
       {!canSubmit && !isSubmitting ? (
         <p className="text-muted-foreground -mt-3 text-center text-xs">
-          Add a photograph, allow location access and enter a title to submit.
+          {isNearPipeline
+            ? "Add a photograph and enter a title to submit."
+            : "Confirm your location near a pipeline, then add a photograph and a title."}
         </p>
       ) : null}
     </form>

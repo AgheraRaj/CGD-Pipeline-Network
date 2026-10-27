@@ -19,4 +19,13 @@ export type FaultReportDto = {
   createdAt: string;
   reportedByName: string;
   photoUrl: string | null;
+  // The nearest known pipeline when the report was made. Null for older reports.
+  nearestPipeline: {
+    kind: string;
+    ref: string | null;
+    code: string;
+    name: string;
+    distanceM: number | null;
+    pipelineId: string | null;
+  } | null;
 };

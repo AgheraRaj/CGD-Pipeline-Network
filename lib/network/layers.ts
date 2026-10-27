@@ -6,7 +6,7 @@ export type NetworkLayerDefinition = {
   label: string;
   description: string;
   color: string;
-  shape: "line" | "dot" | "flow";
+  shape: "line" | "dot" | "flow" | "dotted";
 };
 
 export const networkLayers: NetworkLayerDefinition[] = [
@@ -57,6 +57,14 @@ export const networkLayers: NetworkLayerDefinition[] = [
       "Factories and industrial units connected to the network. They group into clusters when zoomed out.",
     color: NETWORK_COLORS.industrial,
     shape: "dot",
+  },
+  {
+    id: "connections",
+    label: "Consumer connections",
+    description:
+      "Dotted service lines from each industrial consumer to the in-service line that supplies it, in the same area (large loads may take steel). Amber means the supplying line is under maintenance. Visible when zoomed in.",
+    color: "#8b5cf6",
+    shape: "dotted",
   },
   {
     id: "faults",

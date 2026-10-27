@@ -12,14 +12,23 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { DeviceLocation } from "@/hooks/use-device-location";
 import type { FaultReportDto } from "@/lib/faults/types";
+import type { PipelineDto } from "@/lib/pipelines/types";
 
 type ReportFaultDialogProps = {
+  pipelines: PipelineDto[];
+  onLocation?: (location: DeviceLocation) => void;
   onReported: (fault: FaultReportDto) => void;
   onViewOnMap: (fault: FaultReportDto) => void;
 };
 
-export function ReportFaultDialog({ onReported, onViewOnMap }: ReportFaultDialogProps) {
+export function ReportFaultDialog({
+  pipelines,
+  onLocation,
+  onReported,
+  onViewOnMap,
+}: ReportFaultDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -33,11 +42,14 @@ export function ReportFaultDialog({ onReported, onViewOnMap }: ReportFaultDialog
         <DialogHeader>
           <DialogTitle>Report a pipeline fault</DialogTitle>
           <DialogDescription>
-            Take a photograph of the fault. Your current location is attached
+            Stand near the pipeline and confirm your location, then photograph the
+            fault. Your position, the time and the nearest pipeline are attached
             automatically and the team is notified.
           </DialogDescription>
         </DialogHeader>
         <ReportFaultForm
+          pipelines={pipelines}
+          onLocation={onLocation}
           onReported={onReported}
           onClose={() => setIsOpen(false)}
           onViewOnMap={(fault) => {

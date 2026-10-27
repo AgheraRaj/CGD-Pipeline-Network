@@ -334,6 +334,14 @@ export function buildIndustrialConsumerFeatures(): ConsumerFeature[] {
   return features;
 }
 
+// The consumer set is large and never changes, so it is generated once and shared by the
+// map and the connection calculation.
+let industrialConsumerCache: ConsumerFeature[] | null = null;
+export function getIndustrialConsumers(): ConsumerFeature[] {
+  industrialConsumerCache ??= buildIndustrialConsumerFeatures();
+  return industrialConsumerCache;
+}
+
 // ───────────── GeoJSON for the map ─────────────
 
 export function buildNetworkGeoJson(): NetworkGeoJson {
@@ -379,7 +387,7 @@ export function buildNetworkGeoJson(): NetworkGeoJson {
     },
     consumers: {
       type: "FeatureCollection",
-      features: buildIndustrialConsumerFeatures(),
+      features: getIndustrialConsumers(),
     },
   };
 }

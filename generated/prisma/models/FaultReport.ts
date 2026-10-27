@@ -30,12 +30,14 @@ export type FaultReportAvgAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   accuracyMeters: number | null
+  distanceToPipelineM: number | null
 }
 
 export type FaultReportSumAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   accuracyMeters: number | null
+  distanceToPipelineM: number | null
 }
 
 export type FaultReportMinAggregateOutputType = {
@@ -50,6 +52,12 @@ export type FaultReportMinAggregateOutputType = {
   accuracyMeters: number | null
   capturedAt: Date | null
   reportedById: string | null
+  nearestPipelineKind: string | null
+  nearestPipelineRef: string | null
+  nearestPipelineCode: string | null
+  nearestPipelineName: string | null
+  distanceToPipelineM: number | null
+  pipelineId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +74,12 @@ export type FaultReportMaxAggregateOutputType = {
   accuracyMeters: number | null
   capturedAt: Date | null
   reportedById: string | null
+  nearestPipelineKind: string | null
+  nearestPipelineRef: string | null
+  nearestPipelineCode: string | null
+  nearestPipelineName: string | null
+  distanceToPipelineM: number | null
+  pipelineId: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -82,6 +96,12 @@ export type FaultReportCountAggregateOutputType = {
   accuracyMeters: number
   capturedAt: number
   reportedById: number
+  nearestPipelineKind: number
+  nearestPipelineRef: number
+  nearestPipelineCode: number
+  nearestPipelineName: number
+  distanceToPipelineM: number
+  pipelineId: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -92,12 +112,14 @@ export type FaultReportAvgAggregateInputType = {
   latitude?: true
   longitude?: true
   accuracyMeters?: true
+  distanceToPipelineM?: true
 }
 
 export type FaultReportSumAggregateInputType = {
   latitude?: true
   longitude?: true
   accuracyMeters?: true
+  distanceToPipelineM?: true
 }
 
 export type FaultReportMinAggregateInputType = {
@@ -112,6 +134,12 @@ export type FaultReportMinAggregateInputType = {
   accuracyMeters?: true
   capturedAt?: true
   reportedById?: true
+  nearestPipelineKind?: true
+  nearestPipelineRef?: true
+  nearestPipelineCode?: true
+  nearestPipelineName?: true
+  distanceToPipelineM?: true
+  pipelineId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -128,6 +156,12 @@ export type FaultReportMaxAggregateInputType = {
   accuracyMeters?: true
   capturedAt?: true
   reportedById?: true
+  nearestPipelineKind?: true
+  nearestPipelineRef?: true
+  nearestPipelineCode?: true
+  nearestPipelineName?: true
+  distanceToPipelineM?: true
+  pipelineId?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -144,6 +178,12 @@ export type FaultReportCountAggregateInputType = {
   accuracyMeters?: true
   capturedAt?: true
   reportedById?: true
+  nearestPipelineKind?: true
+  nearestPipelineRef?: true
+  nearestPipelineCode?: true
+  nearestPipelineName?: true
+  distanceToPipelineM?: true
+  pipelineId?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -247,6 +287,12 @@ export type FaultReportGroupByOutputType = {
   accuracyMeters: number | null
   capturedAt: Date
   reportedById: string
+  nearestPipelineKind: string | null
+  nearestPipelineRef: string | null
+  nearestPipelineCode: string | null
+  nearestPipelineName: string | null
+  distanceToPipelineM: number | null
+  pipelineId: string | null
   createdAt: Date
   updatedAt: Date
   _count: FaultReportCountAggregateOutputType | null
@@ -286,9 +332,16 @@ export type FaultReportWhereInput = {
   accuracyMeters?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
   capturedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   reportedById?: Prisma.StringFilter<"FaultReport"> | string
+  nearestPipelineKind?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineRef?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineCode?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineName?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  distanceToPipelineM?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
+  pipelineId?: Prisma.StringNullableFilter<"FaultReport"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   reportedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  pipeline?: Prisma.XOR<Prisma.PipelineNullableScalarRelationFilter, Prisma.PipelineWhereInput> | null
   photos?: Prisma.FaultPhotoListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
 }
@@ -305,9 +358,16 @@ export type FaultReportOrderByWithRelationInput = {
   accuracyMeters?: Prisma.SortOrderInput | Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
   reportedById?: Prisma.SortOrder
+  nearestPipelineKind?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineName?: Prisma.SortOrderInput | Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrderInput | Prisma.SortOrder
+  pipelineId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   reportedBy?: Prisma.UserOrderByWithRelationInput
+  pipeline?: Prisma.PipelineOrderByWithRelationInput
   photos?: Prisma.FaultPhotoOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
 }
@@ -327,9 +387,16 @@ export type FaultReportWhereUniqueInput = Prisma.AtLeast<{
   accuracyMeters?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
   capturedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   reportedById?: Prisma.StringFilter<"FaultReport"> | string
+  nearestPipelineKind?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineRef?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineCode?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineName?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  distanceToPipelineM?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
+  pipelineId?: Prisma.StringNullableFilter<"FaultReport"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   reportedBy?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  pipeline?: Prisma.XOR<Prisma.PipelineNullableScalarRelationFilter, Prisma.PipelineWhereInput> | null
   photos?: Prisma.FaultPhotoListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
 }, "id">
@@ -346,6 +413,12 @@ export type FaultReportOrderByWithAggregationInput = {
   accuracyMeters?: Prisma.SortOrderInput | Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
   reportedById?: Prisma.SortOrder
+  nearestPipelineKind?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineRef?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  nearestPipelineName?: Prisma.SortOrderInput | Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrderInput | Prisma.SortOrder
+  pipelineId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FaultReportCountOrderByAggregateInput
@@ -370,6 +443,12 @@ export type FaultReportScalarWhereWithAggregatesInput = {
   accuracyMeters?: Prisma.FloatNullableWithAggregatesFilter<"FaultReport"> | number | null
   capturedAt?: Prisma.DateTimeWithAggregatesFilter<"FaultReport"> | Date | string
   reportedById?: Prisma.StringWithAggregatesFilter<"FaultReport"> | string
+  nearestPipelineKind?: Prisma.StringNullableWithAggregatesFilter<"FaultReport"> | string | null
+  nearestPipelineRef?: Prisma.StringNullableWithAggregatesFilter<"FaultReport"> | string | null
+  nearestPipelineCode?: Prisma.StringNullableWithAggregatesFilter<"FaultReport"> | string | null
+  nearestPipelineName?: Prisma.StringNullableWithAggregatesFilter<"FaultReport"> | string | null
+  distanceToPipelineM?: Prisma.FloatNullableWithAggregatesFilter<"FaultReport"> | number | null
+  pipelineId?: Prisma.StringNullableWithAggregatesFilter<"FaultReport"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FaultReport"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FaultReport"> | Date | string
 }
@@ -385,9 +464,15 @@ export type FaultReportCreateInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   reportedBy: Prisma.UserCreateNestedOneWithoutFaultReportsInput
+  pipeline?: Prisma.PipelineCreateNestedOneWithoutFaultReportsInput
   photos?: Prisma.FaultPhotoCreateNestedManyWithoutFaultReportInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFaultReportInput
 }
@@ -404,6 +489,12 @@ export type FaultReportUncheckedCreateInput = {
   accuracyMeters?: number | null
   capturedAt: Date | string
   reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   photos?: Prisma.FaultPhotoUncheckedCreateNestedManyWithoutFaultReportInput
@@ -421,9 +512,15 @@ export type FaultReportUpdateInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedBy?: Prisma.UserUpdateOneRequiredWithoutFaultReportsNestedInput
+  pipeline?: Prisma.PipelineUpdateOneWithoutFaultReportsNestedInput
   photos?: Prisma.FaultPhotoUpdateManyWithoutFaultReportNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFaultReportNestedInput
 }
@@ -440,6 +537,12 @@ export type FaultReportUncheckedUpdateInput = {
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos?: Prisma.FaultPhotoUncheckedUpdateManyWithoutFaultReportNestedInput
@@ -458,6 +561,12 @@ export type FaultReportCreateManyInput = {
   accuracyMeters?: number | null
   capturedAt: Date | string
   reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -473,6 +582,11 @@ export type FaultReportUpdateManyMutationInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -489,6 +603,12 @@ export type FaultReportUncheckedUpdateManyInput = {
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -515,6 +635,12 @@ export type FaultReportCountOrderByAggregateInput = {
   accuracyMeters?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
   reportedById?: Prisma.SortOrder
+  nearestPipelineKind?: Prisma.SortOrder
+  nearestPipelineRef?: Prisma.SortOrder
+  nearestPipelineCode?: Prisma.SortOrder
+  nearestPipelineName?: Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrder
+  pipelineId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -523,6 +649,7 @@ export type FaultReportAvgOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   accuracyMeters?: Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrder
 }
 
 export type FaultReportMaxOrderByAggregateInput = {
@@ -537,6 +664,12 @@ export type FaultReportMaxOrderByAggregateInput = {
   accuracyMeters?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
   reportedById?: Prisma.SortOrder
+  nearestPipelineKind?: Prisma.SortOrder
+  nearestPipelineRef?: Prisma.SortOrder
+  nearestPipelineCode?: Prisma.SortOrder
+  nearestPipelineName?: Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrder
+  pipelineId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -553,6 +686,12 @@ export type FaultReportMinOrderByAggregateInput = {
   accuracyMeters?: Prisma.SortOrder
   capturedAt?: Prisma.SortOrder
   reportedById?: Prisma.SortOrder
+  nearestPipelineKind?: Prisma.SortOrder
+  nearestPipelineRef?: Prisma.SortOrder
+  nearestPipelineCode?: Prisma.SortOrder
+  nearestPipelineName?: Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrder
+  pipelineId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -561,6 +700,7 @@ export type FaultReportSumOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   accuracyMeters?: Prisma.SortOrder
+  distanceToPipelineM?: Prisma.SortOrder
 }
 
 export type FaultReportScalarRelationFilter = {
@@ -673,6 +813,48 @@ export type FaultReportUpdateOneWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.FaultReportUpdateToOneWithWhereWithoutNotificationsInput, Prisma.FaultReportUpdateWithoutNotificationsInput>, Prisma.FaultReportUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type FaultReportCreateNestedManyWithoutPipelineInput = {
+  create?: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput> | Prisma.FaultReportCreateWithoutPipelineInput[] | Prisma.FaultReportUncheckedCreateWithoutPipelineInput[]
+  connectOrCreate?: Prisma.FaultReportCreateOrConnectWithoutPipelineInput | Prisma.FaultReportCreateOrConnectWithoutPipelineInput[]
+  createMany?: Prisma.FaultReportCreateManyPipelineInputEnvelope
+  connect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+}
+
+export type FaultReportUncheckedCreateNestedManyWithoutPipelineInput = {
+  create?: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput> | Prisma.FaultReportCreateWithoutPipelineInput[] | Prisma.FaultReportUncheckedCreateWithoutPipelineInput[]
+  connectOrCreate?: Prisma.FaultReportCreateOrConnectWithoutPipelineInput | Prisma.FaultReportCreateOrConnectWithoutPipelineInput[]
+  createMany?: Prisma.FaultReportCreateManyPipelineInputEnvelope
+  connect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+}
+
+export type FaultReportUpdateManyWithoutPipelineNestedInput = {
+  create?: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput> | Prisma.FaultReportCreateWithoutPipelineInput[] | Prisma.FaultReportUncheckedCreateWithoutPipelineInput[]
+  connectOrCreate?: Prisma.FaultReportCreateOrConnectWithoutPipelineInput | Prisma.FaultReportCreateOrConnectWithoutPipelineInput[]
+  upsert?: Prisma.FaultReportUpsertWithWhereUniqueWithoutPipelineInput | Prisma.FaultReportUpsertWithWhereUniqueWithoutPipelineInput[]
+  createMany?: Prisma.FaultReportCreateManyPipelineInputEnvelope
+  set?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  disconnect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  delete?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  connect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  update?: Prisma.FaultReportUpdateWithWhereUniqueWithoutPipelineInput | Prisma.FaultReportUpdateWithWhereUniqueWithoutPipelineInput[]
+  updateMany?: Prisma.FaultReportUpdateManyWithWhereWithoutPipelineInput | Prisma.FaultReportUpdateManyWithWhereWithoutPipelineInput[]
+  deleteMany?: Prisma.FaultReportScalarWhereInput | Prisma.FaultReportScalarWhereInput[]
+}
+
+export type FaultReportUncheckedUpdateManyWithoutPipelineNestedInput = {
+  create?: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput> | Prisma.FaultReportCreateWithoutPipelineInput[] | Prisma.FaultReportUncheckedCreateWithoutPipelineInput[]
+  connectOrCreate?: Prisma.FaultReportCreateOrConnectWithoutPipelineInput | Prisma.FaultReportCreateOrConnectWithoutPipelineInput[]
+  upsert?: Prisma.FaultReportUpsertWithWhereUniqueWithoutPipelineInput | Prisma.FaultReportUpsertWithWhereUniqueWithoutPipelineInput[]
+  createMany?: Prisma.FaultReportCreateManyPipelineInputEnvelope
+  set?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  disconnect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  delete?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  connect?: Prisma.FaultReportWhereUniqueInput | Prisma.FaultReportWhereUniqueInput[]
+  update?: Prisma.FaultReportUpdateWithWhereUniqueWithoutPipelineInput | Prisma.FaultReportUpdateWithWhereUniqueWithoutPipelineInput[]
+  updateMany?: Prisma.FaultReportUpdateManyWithWhereWithoutPipelineInput | Prisma.FaultReportUpdateManyWithWhereWithoutPipelineInput[]
+  deleteMany?: Prisma.FaultReportScalarWhereInput | Prisma.FaultReportScalarWhereInput[]
+}
+
 export type FaultReportCreateWithoutReportedByInput = {
   id?: string
   title: string
@@ -684,8 +866,14 @@ export type FaultReportCreateWithoutReportedByInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  pipeline?: Prisma.PipelineCreateNestedOneWithoutFaultReportsInput
   photos?: Prisma.FaultPhotoCreateNestedManyWithoutFaultReportInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFaultReportInput
 }
@@ -701,6 +889,12 @@ export type FaultReportUncheckedCreateWithoutReportedByInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   photos?: Prisma.FaultPhotoUncheckedCreateNestedManyWithoutFaultReportInput
@@ -748,6 +942,12 @@ export type FaultReportScalarWhereInput = {
   accuracyMeters?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
   capturedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   reportedById?: Prisma.StringFilter<"FaultReport"> | string
+  nearestPipelineKind?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineRef?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineCode?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  nearestPipelineName?: Prisma.StringNullableFilter<"FaultReport"> | string | null
+  distanceToPipelineM?: Prisma.FloatNullableFilter<"FaultReport"> | number | null
+  pipelineId?: Prisma.StringNullableFilter<"FaultReport"> | string | null
   createdAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FaultReport"> | Date | string
 }
@@ -763,9 +963,15 @@ export type FaultReportCreateWithoutPhotosInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   reportedBy: Prisma.UserCreateNestedOneWithoutFaultReportsInput
+  pipeline?: Prisma.PipelineCreateNestedOneWithoutFaultReportsInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutFaultReportInput
 }
 
@@ -781,6 +987,12 @@ export type FaultReportUncheckedCreateWithoutPhotosInput = {
   accuracyMeters?: number | null
   capturedAt: Date | string
   reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFaultReportInput
@@ -813,9 +1025,15 @@ export type FaultReportUpdateWithoutPhotosInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedBy?: Prisma.UserUpdateOneRequiredWithoutFaultReportsNestedInput
+  pipeline?: Prisma.PipelineUpdateOneWithoutFaultReportsNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFaultReportNestedInput
 }
 
@@ -831,6 +1049,12 @@ export type FaultReportUncheckedUpdateWithoutPhotosInput = {
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFaultReportNestedInput
@@ -847,9 +1071,15 @@ export type FaultReportCreateWithoutNotificationsInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
   createdAt?: Date | string
   updatedAt?: Date | string
   reportedBy: Prisma.UserCreateNestedOneWithoutFaultReportsInput
+  pipeline?: Prisma.PipelineCreateNestedOneWithoutFaultReportsInput
   photos?: Prisma.FaultPhotoCreateNestedManyWithoutFaultReportInput
 }
 
@@ -865,6 +1095,12 @@ export type FaultReportUncheckedCreateWithoutNotificationsInput = {
   accuracyMeters?: number | null
   capturedAt: Date | string
   reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   photos?: Prisma.FaultPhotoUncheckedCreateNestedManyWithoutFaultReportInput
@@ -897,9 +1133,15 @@ export type FaultReportUpdateWithoutNotificationsInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedBy?: Prisma.UserUpdateOneRequiredWithoutFaultReportsNestedInput
+  pipeline?: Prisma.PipelineUpdateOneWithoutFaultReportsNestedInput
   photos?: Prisma.FaultPhotoUpdateManyWithoutFaultReportNestedInput
 }
 
@@ -915,9 +1157,87 @@ export type FaultReportUncheckedUpdateWithoutNotificationsInput = {
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos?: Prisma.FaultPhotoUncheckedUpdateManyWithoutFaultReportNestedInput
+}
+
+export type FaultReportCreateWithoutPipelineInput = {
+  id?: string
+  title: string
+  description?: string | null
+  faultType: $Enums.FaultType
+  severity: $Enums.FaultSeverity
+  status?: $Enums.FaultStatus
+  latitude: number
+  longitude: number
+  accuracyMeters?: number | null
+  capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reportedBy: Prisma.UserCreateNestedOneWithoutFaultReportsInput
+  photos?: Prisma.FaultPhotoCreateNestedManyWithoutFaultReportInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutFaultReportInput
+}
+
+export type FaultReportUncheckedCreateWithoutPipelineInput = {
+  id?: string
+  title: string
+  description?: string | null
+  faultType: $Enums.FaultType
+  severity: $Enums.FaultSeverity
+  status?: $Enums.FaultStatus
+  latitude: number
+  longitude: number
+  accuracyMeters?: number | null
+  capturedAt: Date | string
+  reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  photos?: Prisma.FaultPhotoUncheckedCreateNestedManyWithoutFaultReportInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutFaultReportInput
+}
+
+export type FaultReportCreateOrConnectWithoutPipelineInput = {
+  where: Prisma.FaultReportWhereUniqueInput
+  create: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput>
+}
+
+export type FaultReportCreateManyPipelineInputEnvelope = {
+  data: Prisma.FaultReportCreateManyPipelineInput | Prisma.FaultReportCreateManyPipelineInput[]
+  skipDuplicates?: boolean
+}
+
+export type FaultReportUpsertWithWhereUniqueWithoutPipelineInput = {
+  where: Prisma.FaultReportWhereUniqueInput
+  update: Prisma.XOR<Prisma.FaultReportUpdateWithoutPipelineInput, Prisma.FaultReportUncheckedUpdateWithoutPipelineInput>
+  create: Prisma.XOR<Prisma.FaultReportCreateWithoutPipelineInput, Prisma.FaultReportUncheckedCreateWithoutPipelineInput>
+}
+
+export type FaultReportUpdateWithWhereUniqueWithoutPipelineInput = {
+  where: Prisma.FaultReportWhereUniqueInput
+  data: Prisma.XOR<Prisma.FaultReportUpdateWithoutPipelineInput, Prisma.FaultReportUncheckedUpdateWithoutPipelineInput>
+}
+
+export type FaultReportUpdateManyWithWhereWithoutPipelineInput = {
+  where: Prisma.FaultReportScalarWhereInput
+  data: Prisma.XOR<Prisma.FaultReportUpdateManyMutationInput, Prisma.FaultReportUncheckedUpdateManyWithoutPipelineInput>
 }
 
 export type FaultReportCreateManyReportedByInput = {
@@ -931,6 +1251,12 @@ export type FaultReportCreateManyReportedByInput = {
   longitude: number
   accuracyMeters?: number | null
   capturedAt: Date | string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  pipelineId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -946,8 +1272,14 @@ export type FaultReportUpdateWithoutReportedByInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  pipeline?: Prisma.PipelineUpdateOneWithoutFaultReportsNestedInput
   photos?: Prisma.FaultPhotoUpdateManyWithoutFaultReportNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutFaultReportNestedInput
 }
@@ -963,6 +1295,12 @@ export type FaultReportUncheckedUpdateWithoutReportedByInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   photos?: Prisma.FaultPhotoUncheckedUpdateManyWithoutFaultReportNestedInput
@@ -980,6 +1318,100 @@ export type FaultReportUncheckedUpdateManyWithoutReportedByInput = {
   longitude?: Prisma.FloatFieldUpdateOperationsInput | number
   accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  pipelineId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FaultReportCreateManyPipelineInput = {
+  id?: string
+  title: string
+  description?: string | null
+  faultType: $Enums.FaultType
+  severity: $Enums.FaultSeverity
+  status?: $Enums.FaultStatus
+  latitude: number
+  longitude: number
+  accuracyMeters?: number | null
+  capturedAt: Date | string
+  reportedById: string
+  nearestPipelineKind?: string | null
+  nearestPipelineRef?: string | null
+  nearestPipelineCode?: string | null
+  nearestPipelineName?: string | null
+  distanceToPipelineM?: number | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FaultReportUpdateWithoutPipelineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faultType?: Prisma.EnumFaultTypeFieldUpdateOperationsInput | $Enums.FaultType
+  severity?: Prisma.EnumFaultSeverityFieldUpdateOperationsInput | $Enums.FaultSeverity
+  status?: Prisma.EnumFaultStatusFieldUpdateOperationsInput | $Enums.FaultStatus
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportedBy?: Prisma.UserUpdateOneRequiredWithoutFaultReportsNestedInput
+  photos?: Prisma.FaultPhotoUpdateManyWithoutFaultReportNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutFaultReportNestedInput
+}
+
+export type FaultReportUncheckedUpdateWithoutPipelineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faultType?: Prisma.EnumFaultTypeFieldUpdateOperationsInput | $Enums.FaultType
+  severity?: Prisma.EnumFaultSeverityFieldUpdateOperationsInput | $Enums.FaultSeverity
+  status?: Prisma.EnumFaultStatusFieldUpdateOperationsInput | $Enums.FaultStatus
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  photos?: Prisma.FaultPhotoUncheckedUpdateManyWithoutFaultReportNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutFaultReportNestedInput
+}
+
+export type FaultReportUncheckedUpdateManyWithoutPipelineInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  faultType?: Prisma.EnumFaultTypeFieldUpdateOperationsInput | $Enums.FaultType
+  severity?: Prisma.EnumFaultSeverityFieldUpdateOperationsInput | $Enums.FaultSeverity
+  status?: Prisma.EnumFaultStatusFieldUpdateOperationsInput | $Enums.FaultStatus
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  accuracyMeters?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  capturedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reportedById?: Prisma.StringFieldUpdateOperationsInput | string
+  nearestPipelineKind?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineRef?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  nearestPipelineName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  distanceToPipelineM?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1036,9 +1468,16 @@ export type FaultReportSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   accuracyMeters?: boolean
   capturedAt?: boolean
   reportedById?: boolean
+  nearestPipelineKind?: boolean
+  nearestPipelineRef?: boolean
+  nearestPipelineCode?: boolean
+  nearestPipelineName?: boolean
+  distanceToPipelineM?: boolean
+  pipelineId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
   photos?: boolean | Prisma.FaultReport$photosArgs<ExtArgs>
   notifications?: boolean | Prisma.FaultReport$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.FaultReportCountOutputTypeDefaultArgs<ExtArgs>
@@ -1056,9 +1495,16 @@ export type FaultReportSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   accuracyMeters?: boolean
   capturedAt?: boolean
   reportedById?: boolean
+  nearestPipelineKind?: boolean
+  nearestPipelineRef?: boolean
+  nearestPipelineCode?: boolean
+  nearestPipelineName?: boolean
+  distanceToPipelineM?: boolean
+  pipelineId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
 }, ExtArgs["result"]["faultReport"]>
 
 export type FaultReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1073,9 +1519,16 @@ export type FaultReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   accuracyMeters?: boolean
   capturedAt?: boolean
   reportedById?: boolean
+  nearestPipelineKind?: boolean
+  nearestPipelineRef?: boolean
+  nearestPipelineCode?: boolean
+  nearestPipelineName?: boolean
+  distanceToPipelineM?: boolean
+  pipelineId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
 }, ExtArgs["result"]["faultReport"]>
 
 export type FaultReportSelectScalar = {
@@ -1090,28 +1543,38 @@ export type FaultReportSelectScalar = {
   accuracyMeters?: boolean
   capturedAt?: boolean
   reportedById?: boolean
+  nearestPipelineKind?: boolean
+  nearestPipelineRef?: boolean
+  nearestPipelineCode?: boolean
+  nearestPipelineName?: boolean
+  distanceToPipelineM?: boolean
+  pipelineId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FaultReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "faultType" | "severity" | "status" | "latitude" | "longitude" | "accuracyMeters" | "capturedAt" | "reportedById" | "createdAt" | "updatedAt", ExtArgs["result"]["faultReport"]>
+export type FaultReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "faultType" | "severity" | "status" | "latitude" | "longitude" | "accuracyMeters" | "capturedAt" | "reportedById" | "nearestPipelineKind" | "nearestPipelineRef" | "nearestPipelineCode" | "nearestPipelineName" | "distanceToPipelineM" | "pipelineId" | "createdAt" | "updatedAt", ExtArgs["result"]["faultReport"]>
 export type FaultReportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
   photos?: boolean | Prisma.FaultReport$photosArgs<ExtArgs>
   notifications?: boolean | Prisma.FaultReport$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.FaultReportCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type FaultReportIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
 }
 export type FaultReportIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   reportedBy?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  pipeline?: boolean | Prisma.FaultReport$pipelineArgs<ExtArgs>
 }
 
 export type $FaultReportPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "FaultReport"
   objects: {
     reportedBy: Prisma.$UserPayload<ExtArgs>
+    pipeline: Prisma.$PipelinePayload<ExtArgs> | null
     photos: Prisma.$FaultPhotoPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
   }
@@ -1127,6 +1590,12 @@ export type $FaultReportPayload<ExtArgs extends runtime.Types.Extensions.Interna
     accuracyMeters: number | null
     capturedAt: Date
     reportedById: string
+    nearestPipelineKind: string | null
+    nearestPipelineRef: string | null
+    nearestPipelineCode: string | null
+    nearestPipelineName: string | null
+    distanceToPipelineM: number | null
+    pipelineId: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["faultReport"]>
@@ -1524,6 +1993,7 @@ readonly fields: FaultReportFieldRefs;
 export interface Prisma__FaultReportClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   reportedBy<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  pipeline<T extends Prisma.FaultReport$pipelineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FaultReport$pipelineArgs<ExtArgs>>): Prisma.Prisma__PipelineClient<runtime.Types.Result.GetResult<Prisma.$PipelinePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   photos<T extends Prisma.FaultReport$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FaultReport$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FaultPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.FaultReport$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FaultReport$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1566,6 +2036,12 @@ export interface FaultReportFieldRefs {
   readonly accuracyMeters: Prisma.FieldRef<"FaultReport", 'Float'>
   readonly capturedAt: Prisma.FieldRef<"FaultReport", 'DateTime'>
   readonly reportedById: Prisma.FieldRef<"FaultReport", 'String'>
+  readonly nearestPipelineKind: Prisma.FieldRef<"FaultReport", 'String'>
+  readonly nearestPipelineRef: Prisma.FieldRef<"FaultReport", 'String'>
+  readonly nearestPipelineCode: Prisma.FieldRef<"FaultReport", 'String'>
+  readonly nearestPipelineName: Prisma.FieldRef<"FaultReport", 'String'>
+  readonly distanceToPipelineM: Prisma.FieldRef<"FaultReport", 'Float'>
+  readonly pipelineId: Prisma.FieldRef<"FaultReport", 'String'>
   readonly createdAt: Prisma.FieldRef<"FaultReport", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FaultReport", 'DateTime'>
 }
@@ -1966,6 +2442,25 @@ export type FaultReportDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Limit how many FaultReports to delete.
    */
   limit?: number
+}
+
+/**
+ * FaultReport.pipeline
+ */
+export type FaultReport$pipelineArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pipeline
+   */
+  select?: Prisma.PipelineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pipeline
+   */
+  omit?: Prisma.PipelineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineInclude<ExtArgs> | null
+  where?: Prisma.PipelineWhereInput
 }
 
 /**

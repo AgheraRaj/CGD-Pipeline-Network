@@ -7,6 +7,7 @@ export type NetworkLayerId =
   | "mdpe"
   | "pipelines"
   | "flow"
+  | "connections"
   | "cgs"
   | "industrial"
   | "faults";

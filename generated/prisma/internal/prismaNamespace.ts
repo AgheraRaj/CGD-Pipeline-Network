@@ -1125,6 +1125,12 @@ export const FaultReportScalarFieldEnum = {
   accuracyMeters: 'accuracyMeters',
   capturedAt: 'capturedAt',
   reportedById: 'reportedById',
+  nearestPipelineKind: 'nearestPipelineKind',
+  nearestPipelineRef: 'nearestPipelineRef',
+  nearestPipelineCode: 'nearestPipelineCode',
+  nearestPipelineName: 'nearestPipelineName',
+  distanceToPipelineM: 'distanceToPipelineM',
+  pipelineId: 'pipelineId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

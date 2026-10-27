@@ -19,6 +19,7 @@ type NetworkSidePanelProps = {
   onLayerToggle: (layerId: NetworkLayerId, isVisible: boolean) => void;
   summary: NetworkSummary;
   pipelineSummary: PipelineSummary;
+  connectedConsumerCount: number;
   openFaultCount: number;
 };
 
@@ -32,6 +33,14 @@ function PanelHeading({ children }: { children: React.ReactNode }) {
 
 // The same swatch is used in the layer list and the legend, so the two always match.
 function LayerSwatch({ layer }: { layer: NetworkLayerDefinition }) {
+  if (layer.shape === "dotted") {
+    return (
+      <span
+        className="w-4 border-t-2 border-dotted"
+        style={{ borderColor: layer.color }}
+      />
+    );
+  }
   if (layer.shape === "flow") {
     return (
       <span className="text-muted-foreground flex w-4 items-center justify-center">
@@ -63,6 +72,7 @@ export function NetworkSidePanel({
   onLayerToggle,
   summary,
   pipelineSummary,
+  connectedConsumerCount,
   openFaultCount,
 }: NetworkSidePanelProps) {
   const selectedArea = getGeographicalArea(selection);
@@ -72,6 +82,7 @@ export function NetworkSidePanel({
     mdpe: summary.mdpeSegments,
     pipelines: pipelineSummary.count,
     flow: summary.steelSegments + summary.mdpeSegments + pipelineSummary.flowCount,
+    connections: connectedConsumerCount,
     cgs: summary.cgsCount,
     industrial: summary.industrialConsumers,
     faults: openFaultCount,
@@ -215,6 +226,23 @@ export function NetworkSidePanel({
               <ChevronsRight className="size-3.5" />
             </span>
             Configured gas flow direction (not live data)
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="flex w-5 items-center">
+              <span className="w-4 border-t-2 border-dotted border-violet-500" />
+              <span className="size-1.5 rounded-full bg-violet-500 ring-1 ring-white" />
+            </span>
+            Consumer service connection · tap point on the main
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="w-5 border-t-2 border-dotted border-amber-500" />
+            Connection whose supply line is under maintenance
+          </li>
+          <li className="flex items-center gap-3">
+            <span className="flex w-5 justify-center">
+              <span className="size-2.5 rounded-full bg-blue-600 ring-2 ring-blue-600/20" />
+            </span>
+            Your location while reporting a fault
           </li>
           <li className="flex items-center gap-3">
             <span className={`h-3 w-5 rounded-[3px] ${GA_BOUNDARY_SWATCH_CLASS}`} />

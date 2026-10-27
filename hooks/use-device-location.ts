@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export type DeviceLocation = {
   latitude: number;
@@ -12,7 +12,8 @@ export type DeviceLocation = {
 export type DeviceLocationState =
   | { status: "idle" }
   | { status: "requesting" }
-  | { status: "success"; location: DeviceLocation }
+  // While a new fix is being read, the previous one stays on screen.
+  | { status: "success"; location: DeviceLocation; isRefreshing?: boolean }
   | { status: "error"; message: string };
 
 function describeError(error: GeolocationPositionError) {
@@ -28,8 +29,17 @@ function describeError(error: GeolocationPositionError) {
   }
 }
 
-export function useDeviceLocation() {
+type UseDeviceLocationOptions = {
+  // Called with each new fix, e.g. to show it on the main map as well.
+  onLocation?: (location: DeviceLocation) => void;
+};
+
+export function useDeviceLocation({ onLocation }: UseDeviceLocationOptions = {}) {
   const [state, setState] = useState<DeviceLocationState>({ status: "idle" });
+  const onLocationRef = useRef(onLocation);
+  useEffect(() => {
+    onLocationRef.current = onLocation;
+  }, [onLocation]);
 
   const request = useCallback(() => {
     if (!("geolocation" in navigator)) {
@@ -47,18 +57,20 @@ export function useDeviceLocation() {
       return;
     }
 
-    setState({ status: "requesting" });
+    setState((current) =>
+      current.status === "success" ? { ...current, isRefreshing: true } : { status: "requesting" }
+    );
     navigator.geolocation.getCurrentPosition(
-      (position) =>
-        setState({
-          status: "success",
-          location: {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            accuracyMeters: position.coords.accuracy,
-            capturedAt: new Date(position.timestamp).toISOString(),
-          },
-        }),
+      (position) => {
+        const location: DeviceLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracyMeters: position.coords.accuracy,
+          capturedAt: new Date(position.timestamp).toISOString(),
+        };
+        setState({ status: "success", location });
+        onLocationRef.current?.(location);
+      },
       (error) => setState({ status: "error", message: describeError(error) }),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 0 }
     );

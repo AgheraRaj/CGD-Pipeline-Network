@@ -5,6 +5,7 @@ import {
   getFaultSeverityLabel,
   getFaultTypeLabel,
 } from "@/lib/faults/constants";
+import { checkFaultProximity, formatDistance } from "@/lib/faults/proximity";
 import { faultReportInclude, toFaultDto } from "@/lib/faults/serialize";
 import { parseFaultForm } from "@/lib/faults/validation";
 import { prisma } from "@/lib/prisma";
@@ -43,6 +44,38 @@ export async function POST(request: Request) {
   }
   const { photo, ...fields } = parsed.data;
 
+  // Enforced here as well as in the form, so the rule cannot be skipped by calling the API
+  // directly. Checked before the photo upload, so a refused report leaves nothing behind.
+  const registeredPipelines = await prisma.pipeline.findMany({
+    where: { status: { not: "PLANNED" } },
+    select: {
+      id: true,
+      pipelineCode: true,
+      name: true,
+      gaCode: true,
+      status: true,
+      routeCoordinates: true,
+    },
+  });
+  const proximity = checkFaultProximity(
+    fields.longitude,
+    fields.latitude,
+    fields.accuracyMeters,
+    registeredPipelines.map((pipeline) => ({
+      ...pipeline,
+      routeCoordinates: Array.isArray(pipeline.routeCoordinates)
+        ? (pipeline.routeCoordinates as [number, number][])
+        : [],
+    }))
+  );
+  if (!proximity.ok) {
+    return NextResponse.json(
+      { error: proximity.message, reason: proximity.reason },
+      { status: 422 }
+    );
+  }
+  const { nearest } = proximity;
+
   let uploadedPhoto;
   try {
     uploadedPhoto = await uploadFaultPhoto(photo);
@@ -59,6 +92,14 @@ export async function POST(request: Request) {
       const report = await transaction.faultReport.create({
         data: {
           ...fields,
+          // Every report starts unverified; only a person reviewing it changes the status.
+          status: "REPORTED",
+          nearestPipelineKind: nearest.kind,
+          nearestPipelineRef: nearest.ref,
+          nearestPipelineCode: nearest.code,
+          nearestPipelineName: nearest.name,
+          distanceToPipelineM: Math.round(nearest.distanceM * 10) / 10,
+          pipelineId: nearest.pipelineId,
           reportedById: session.user.id,
           photos: {
             create: {
@@ -84,7 +125,7 @@ export async function POST(request: Request) {
             userId: recipient.id,
             type: "FAULT_REPORTED" as const,
             title: "New pipeline fault reported",
-            body: `${getFaultSeverityLabel(fields.severity)} · ${getFaultTypeLabel(fields.faultType)}: ${fields.title} (reported by ${session.user.name})`,
+            body: `${getFaultSeverityLabel(fields.severity)} · ${getFaultTypeLabel(fields.faultType)}: ${fields.title} — ${formatDistance(nearest.distanceM)} from ${nearest.code} (reported by ${session.user.name})`,
             faultReportId: report.id,
           })),
         });

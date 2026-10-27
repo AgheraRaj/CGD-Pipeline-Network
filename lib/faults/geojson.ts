@@ -14,6 +14,10 @@ export type FaultProperties = {
   createdAt: string;
   reportedByName: string;
   photoUrl: string;
+  nearestPipelineKind: string;
+  nearestPipelineCode: string;
+  nearestPipelineName: string;
+  distanceToPipelineM: number | null;
 };
 
 // Map feature properties can only hold simple values, so everything is flattened here.
@@ -31,6 +35,10 @@ export function faultToProperties(fault: FaultReportDto): FaultProperties {
     createdAt: fault.createdAt,
     reportedByName: fault.reportedByName,
     photoUrl: fault.photoUrl ?? "",
+    nearestPipelineKind: fault.nearestPipeline?.kind ?? "",
+    nearestPipelineCode: fault.nearestPipeline?.code ?? "",
+    nearestPipelineName: fault.nearestPipeline?.name ?? "",
+    distanceToPipelineM: fault.nearestPipeline?.distanceM ?? null,
   };
 }
 
