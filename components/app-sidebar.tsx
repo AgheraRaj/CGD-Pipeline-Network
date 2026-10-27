@@ -44,6 +44,7 @@ export function AppSidebar() {
                     <SidebarMenuButton
                       render={<Link href={item.href} />}
                       isActive={isActivePath(pathname, item.href)}
+                      className="data-active:bg-sidebar-primary/10 data-active:text-sidebar-primary data-active:hover:text-sidebar-primary data-active:hover:bg-sidebar-primary/10"
                       tooltip={item.title}
                     >
                       <item.icon />

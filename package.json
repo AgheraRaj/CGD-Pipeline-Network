@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/copy-maplibre-worker.mjs && next dev",
+    "build": "node scripts/copy-maplibre-worker.mjs && next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "postinstall": "node scripts/copy-maplibre-worker.mjs && prisma generate"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -17,6 +18,7 @@
     "cn": "^0.5.0",
     "dotenv": "^18.0.9",
     "lucide-react": "^1.61.0",
+    "maplibre-gl": "^6.16.0",
     "next": "16.4.3",
     "next-themes": "^0.4.6",
     "pg": "^8.23.1",

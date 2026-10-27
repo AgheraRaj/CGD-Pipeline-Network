@@ -1,4 +1,4 @@
-import { LayoutDashboard, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Map as MapIcon, type LucideIcon } from "lucide-react";
 
 export type NavigationItem = {
   title: string;
@@ -11,11 +11,14 @@ export type NavigationGroup = {
   items: NavigationItem[];
 };
 
-// Add Map view, Fault reports and Notifications here as those pages are built.
+// Add Fault reports and Notifications here as those pages are built.
 export const navigation: NavigationGroup[] = [
   {
     label: "Monitoring",
-    items: [{ title: "Overview", href: "/overview", icon: LayoutDashboard }],
+    items: [
+      { title: "Overview", href: "/overview", icon: LayoutDashboard },
+      { title: "Map view", href: "/map", icon: MapIcon },
+    ],
   },
 ];
 

@@ -8,16 +8,18 @@ export function BrandLogo({ className }: { className?: string }) {
       <Image
         src={brandAssets.logoForLightMode}
         alt="Altrex"
-        width={1920}
-        height={338}
-        className={`h-7 w-auto self-start dark:hidden ${className ?? ""}`}
+        width={140}
+        height={32}
+        loading="eager"
+        className={`h-7 w-auto dark:hidden ${className ?? ""}`}
       />
       <Image
         src={brandAssets.logoForDarkMode}
         alt="Altrex"
-        width={1920}
-        height={338}
-        className={`hidden h-7 w-auto self-start dark:block ${className ?? ""}`}
+        width={140}
+        height={32}
+        loading="eager"
+        className={`hidden h-7 w-auto dark:block ${className ?? ""}`}
       />
     </>
   );
