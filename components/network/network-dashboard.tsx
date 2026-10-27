@@ -158,13 +158,16 @@ export function NetworkDashboard() {
           onSelectAsset={setSelectedAsset}
         />
 
-        <div className="absolute top-3 left-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-start gap-2">
+        <div className="absolute top-3 left-3 right-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-start justify-between gap-2">
           <NetworkStatsBar summary={summary} pipelineSummary={pipelineSummary} />
-          <Button size="sm" variant="secondary" className="shadow-sm" onClick={openAddPipeline}>
+          <div className="flex items-center gap-2">
+            <Button size="sm" variant="secondary" className="shadow-sm" onClick={openAddPipeline}>
             <Plus className="size-4" />
             Add pipeline
           </Button>
           <ReportFaultDialog onReported={addFault} onViewOnMap={handleViewFaultOnMap} />
+          </div>
+          
         </div>
 
         {displayedAsset ? (
