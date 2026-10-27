@@ -76,3 +76,8 @@ export type FaultPhoto = Prisma.FaultPhotoModel
  * 
  */
 export type Notification = Prisma.NotificationModel
+/**
+ * Model Pipeline
+ * 
+ */
+export type Pipeline = Prisma.PipelineModel

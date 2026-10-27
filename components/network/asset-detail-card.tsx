@@ -7,9 +7,10 @@ import type { AssetDetails } from "@/lib/network/asset-details";
 type AssetDetailCardProps = {
   asset: AssetDetails;
   onClose: () => void;
+  actions?: React.ReactNode;
 };
 
-export function AssetDetailCard({ asset, onClose }: AssetDetailCardProps) {
+export function AssetDetailCard({ asset, onClose, actions }: AssetDetailCardProps) {
   return (
     <div
       role="dialog"
@@ -59,6 +60,8 @@ export function AssetDetailCard({ asset, onClose }: AssetDetailCardProps) {
           </div>
         ))}
       </dl>
+
+      {actions ? <div className="mt-4 flex gap-2 border-t pt-3">{actions}</div> : null}
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { OverviewDashboard } from "@/components/overview/overview-dashboard";
 import { PageHeader } from "@/components/page-header";
+import { PageNavLinks } from "@/components/page-nav-links";
 
 export const metadata: Metadata = { title: "Overview" };
 
@@ -8,11 +10,10 @@ export default function OverviewPage() {
     <>
       <PageHeader
         title="Overview"
-        description="Network summary for all geographical areas"
+        description="Key figures, alerts and recent activity across the CGD network"
+        actions={<PageNavLinks current="/overview" />}
       />
-      <div className="text-muted-foreground flex flex-1 items-center justify-center rounded-xl border border-dashed p-10 text-sm">
-        Network metrics and charts are added in the dashboard phase.
-      </div>
+      <OverviewDashboard />
     </>
   );
 }

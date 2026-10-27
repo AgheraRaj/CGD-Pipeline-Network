@@ -1,3 +1,4 @@
+import { NETWORK_COLORS } from "./map-theme";
 import type { NetworkLayerId } from "./types";
 
 export type NetworkLayerDefinition = {
@@ -5,7 +6,7 @@ export type NetworkLayerDefinition = {
   label: string;
   description: string;
   color: string;
-  shape: "line" | "dot";
+  shape: "line" | "dot" | "flow";
 };
 
 export const networkLayers: NetworkLayerDefinition[] = [
@@ -14,7 +15,7 @@ export const networkLayers: NetworkLayerDefinition[] = [
     label: "Steel trunk mains",
     description:
       "High-pressure steel pipelines (MAOP ≥ 19 bar) that carry gas from City Gate Stations to each area.",
-    color: "#f59e0b",
+    color: NETWORK_COLORS.steel,
     shape: "line",
   },
   {
@@ -22,15 +23,31 @@ export const networkLayers: NetworkLayerDefinition[] = [
     label: "MDPE distribution",
     description:
       "Medium-density polyethylene lines (≤ 4 bar) that distribute gas to neighbourhoods and customers.",
-    color: "#3b82f6",
+    color: NETWORK_COLORS.mdpe,
     shape: "line",
+  },
+  {
+    id: "pipelines",
+    label: "Registered pipelines",
+    description:
+      "Pipelines added through Pipeline management, with a dark outline. Dashed lines are planned or under construction; grey lines are decommissioned.",
+    color: NETWORK_COLORS.pipelines,
+    shape: "line",
+  },
+  {
+    id: "flow",
+    label: "Gas flow direction",
+    description:
+      "Arrows and moving dashes show each line's configured flow direction, away from its supply point. This is not a live flow measurement. Shown on operational lines; bidirectional pipelines have no arrows.",
+    color: "#64748b",
+    shape: "flow",
   },
   {
     id: "cgs",
     label: "City Gate Stations (CGS)",
     description:
       "Entry points where gas arrives from the transmission pipeline and its pressure is reduced.",
-    color: "#f97316",
+    color: NETWORK_COLORS.cgs,
     shape: "dot",
   },
   {
@@ -38,7 +55,7 @@ export const networkLayers: NetworkLayerDefinition[] = [
     label: "Industrial consumers",
     description:
       "Factories and industrial units connected to the network. They group into clusters when zoomed out.",
-    color: "#8b5cf6",
+    color: NETWORK_COLORS.industrial,
     shape: "dot",
   },
   {
@@ -46,7 +63,7 @@ export const networkLayers: NetworkLayerDefinition[] = [
     label: "Reported faults",
     description:
       "Faults reported by field staff with a photograph. Larger markers are more severe; resolved faults turn grey.",
-    color: "#ef4444",
+    color: NETWORK_COLORS.faults,
     shape: "dot",
   },
 ];

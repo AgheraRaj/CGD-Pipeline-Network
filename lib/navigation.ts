@@ -1,4 +1,4 @@
-import { LayoutDashboard, Map as MapIcon, type LucideIcon } from "lucide-react";
+import { LayoutDashboard, Map as MapIcon, Route, type LucideIcon } from "lucide-react";
 
 export type NavigationItem = {
   title: string;
@@ -19,6 +19,10 @@ export const navigation: NavigationGroup[] = [
       { title: "Overview", href: "/overview", icon: LayoutDashboard },
       { title: "Map view", href: "/map", icon: MapIcon },
     ],
+  },
+  {
+    label: "Assets",
+    items: [{ title: "Pipelines", href: "/pipelines", icon: Route }],
   },
 ];
 

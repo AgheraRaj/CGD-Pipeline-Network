@@ -22,6 +22,8 @@ model User {
   accounts      Account[]
   faultReports  FaultReport[]
   notifications Notification[]
+  pipelinesCreated Pipeline[] @relation("PipelineCreatedBy")
+  pipelinesUpdated Pipeline[] @relation("PipelineUpdatedBy")
 
   @@map("user")
 }
@@ -161,4 +163,74 @@ model Notification {
   @@index([userId, readAt])
   @@index([userId, createdAt])
   @@map("notification")
+}
+
+// ───────────── Pipeline management ─────────────
+
+enum PipelineMaterial {
+  STEEL
+  MDPE
+  HDPE
+  DUCTILE_IRON
+  OTHER
+}
+
+enum PipelineType {
+  TRANSMISSION
+  TRUNK_MAIN
+  DISTRIBUTION
+  SERVICE_LINE
+}
+
+enum PipelineStatus {
+  PLANNED
+  UNDER_CONSTRUCTION
+  OPERATIONAL
+  UNDER_MAINTENANCE
+  DECOMMISSIONED
+}
+
+enum PipelineFlowDirection {
+  FORWARD
+  REVERSE
+  BIDIRECTIONAL
+}
+
+model Pipeline {
+  id                String                @id @default(cuid())
+  // The operator's own identifier, e.g. "AMD-ST-014". Stored in upper case and unique.
+  pipelineCode      String                @unique
+  name              String
+  description       String?
+
+  material          PipelineMaterial
+  pipelineType      PipelineType
+  status            PipelineStatus        @default(OPERATIONAL)
+  diameterMm        Float
+  lengthKm          Float
+  depthM            Float
+  pressureRatingBar Float?
+  gaCode            String
+  installationDate  DateTime              @db.Date
+  flowDirection     PipelineFlowDirection @default(FORWARD)
+  routeDescription  String?
+
+  // Ordered [longitude, latitude] pairs from start to end, including every bend.
+  routeCoordinates  Json
+  startLatitude     Float
+  startLongitude    Float
+  endLatitude       Float
+  endLongitude      Float
+
+  createdById       String?
+  createdBy         User?                 @relation("PipelineCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  updatedById       String?
+  updatedBy         User?                 @relation("PipelineUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+
+  @@index([gaCode])
+  @@index([status])
+  @@map("pipeline")
 }

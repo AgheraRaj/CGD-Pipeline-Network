@@ -2,7 +2,14 @@ import type { Feature, FeatureCollection, LineString, Point, Polygon } from "geo
 
 export type LngLat = [longitude: number, latitude: number];
 
-export type NetworkLayerId = "steel" | "mdpe" | "cgs" | "industrial" | "faults";
+export type NetworkLayerId =
+  | "steel"
+  | "mdpe"
+  | "pipelines"
+  | "flow"
+  | "cgs"
+  | "industrial"
+  | "faults";
 
 export type GeographicalArea = {
   code: string;
@@ -51,6 +58,8 @@ export type ConsumerProperties = {
 
 export type NetworkGeoJson = {
   areas: FeatureCollection<Polygon, { code: string; name: string; color: string }>;
+  // One point per area, on the top edge of its boundary, for the area name label.
+  areaLabels: FeatureCollection<Point, { code: string; name: string }>;
   routes: FeatureCollection<LineString, Omit<PipelineRoute, "coordinates">>;
   stations: FeatureCollection<Point, Omit<CityGateStation, "coordinates">>;
   consumers: FeatureCollection<Point, ConsumerProperties>;

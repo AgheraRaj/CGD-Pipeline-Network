@@ -47,3 +47,44 @@ export const NotificationType = {
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const PipelineMaterial = {
+  STEEL: 'STEEL',
+  MDPE: 'MDPE',
+  HDPE: 'HDPE',
+  DUCTILE_IRON: 'DUCTILE_IRON',
+  OTHER: 'OTHER'
+} as const
+
+export type PipelineMaterial = (typeof PipelineMaterial)[keyof typeof PipelineMaterial]
+
+
+export const PipelineType = {
+  TRANSMISSION: 'TRANSMISSION',
+  TRUNK_MAIN: 'TRUNK_MAIN',
+  DISTRIBUTION: 'DISTRIBUTION',
+  SERVICE_LINE: 'SERVICE_LINE'
+} as const
+
+export type PipelineType = (typeof PipelineType)[keyof typeof PipelineType]
+
+
+export const PipelineStatus = {
+  PLANNED: 'PLANNED',
+  UNDER_CONSTRUCTION: 'UNDER_CONSTRUCTION',
+  OPERATIONAL: 'OPERATIONAL',
+  UNDER_MAINTENANCE: 'UNDER_MAINTENANCE',
+  DECOMMISSIONED: 'DECOMMISSIONED'
+} as const
+
+export type PipelineStatus = (typeof PipelineStatus)[keyof typeof PipelineStatus]
+
+
+export const PipelineFlowDirection = {
+  FORWARD: 'FORWARD',
+  REVERSE: 'REVERSE',
+  BIDIRECTIONAL: 'BIDIRECTIONAL'
+} as const
+
+export type PipelineFlowDirection = (typeof PipelineFlowDirection)[keyof typeof PipelineFlowDirection]

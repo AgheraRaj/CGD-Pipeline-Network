@@ -403,7 +403,8 @@ export const ModelName = {
   Verification: 'Verification',
   FaultReport: 'FaultReport',
   FaultPhoto: 'FaultPhoto',
-  Notification: 'Notification'
+  Notification: 'Notification',
+  Pipeline: 'Pipeline'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "account" | "verification" | "faultReport" | "faultPhoto" | "notification"
+    modelProps: "user" | "session" | "account" | "verification" | "faultReport" | "faultPhoto" | "notification" | "pipeline"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Pipeline: {
+      payload: Prisma.$PipelinePayload<ExtArgs>
+      fields: Prisma.PipelineFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PipelineFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PipelineFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        findFirst: {
+          args: Prisma.PipelineFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PipelineFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        findMany: {
+          args: Prisma.PipelineFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>[]
+        }
+        create: {
+          args: Prisma.PipelineCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        createMany: {
+          args: Prisma.PipelineCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PipelineCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>[]
+        }
+        delete: {
+          args: Prisma.PipelineDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        update: {
+          args: Prisma.PipelineUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        deleteMany: {
+          args: Prisma.PipelineDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PipelineUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PipelineUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>[]
+        }
+        upsert: {
+          args: Prisma.PipelineUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PipelinePayload>
+        }
+        aggregate: {
+          args: Prisma.PipelineAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePipeline>
+        }
+        groupBy: {
+          args: Prisma.PipelineGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PipelineGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PipelineCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PipelineCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1084,12 +1159,49 @@ export const NotificationScalarFieldEnum = {
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
 
 
+export const PipelineScalarFieldEnum = {
+  id: 'id',
+  pipelineCode: 'pipelineCode',
+  name: 'name',
+  description: 'description',
+  material: 'material',
+  pipelineType: 'pipelineType',
+  status: 'status',
+  diameterMm: 'diameterMm',
+  lengthKm: 'lengthKm',
+  depthM: 'depthM',
+  pressureRatingBar: 'pressureRatingBar',
+  gaCode: 'gaCode',
+  installationDate: 'installationDate',
+  flowDirection: 'flowDirection',
+  routeDescription: 'routeDescription',
+  routeCoordinates: 'routeCoordinates',
+  startLatitude: 'startLatitude',
+  startLongitude: 'startLongitude',
+  endLatitude: 'endLatitude',
+  endLongitude: 'endLongitude',
+  createdById: 'createdById',
+  updatedById: 'updatedById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PipelineScalarFieldEnum = (typeof PipelineScalarFieldEnum)[keyof typeof PipelineScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
 } as const
 
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull
+} as const
+
+export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1106,6 +1218,15 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 
 
 
@@ -1230,6 +1351,76 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
  * Reference to a field of type 'NotificationType[]'
  */
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineMaterial'
+ */
+export type EnumPipelineMaterialFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineMaterial'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineMaterial[]'
+ */
+export type ListEnumPipelineMaterialFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineMaterial[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineType'
+ */
+export type EnumPipelineTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineType'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineType[]'
+ */
+export type ListEnumPipelineTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineType[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineStatus'
+ */
+export type EnumPipelineStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineStatus[]'
+ */
+export type ListEnumPipelineStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineFlowDirection'
+ */
+export type EnumPipelineFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineFlowDirection'>
+    
+
+
+/**
+ * Reference to a field of type 'PipelineFlowDirection[]'
+ */
+export type ListEnumPipelineFlowDirectionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PipelineFlowDirection[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Json'
+ */
+export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+/**
+ * Reference to a field of type 'QueryMode'
+ */
+export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 /**
@@ -1390,6 +1581,7 @@ export type GlobalOmitConfig = {
   faultReport?: Prisma.FaultReportOmit
   faultPhoto?: Prisma.FaultPhotoOmit
   notification?: Prisma.NotificationOmit
+  pipeline?: Prisma.PipelineOmit
 }
 
 /* Types for Logging */

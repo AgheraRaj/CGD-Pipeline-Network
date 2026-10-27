@@ -1,8 +1,14 @@
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { formatKilometres, formatNumber } from "@/lib/format";
 import type { NetworkSummary } from "@/lib/network/types";
+import type { PipelineSummary } from "@/lib/pipelines/summary";
 
-export function NetworkStatsBar({ summary }: { summary: NetworkSummary }) {
+type NetworkStatsBarProps = {
+  summary: NetworkSummary;
+  pipelineSummary: PipelineSummary;
+};
+
+export function NetworkStatsBar({ summary, pipelineSummary }: NetworkStatsBarProps) {
   const stats = [
     {
       label: "CGS",
@@ -18,10 +24,17 @@ export function NetworkStatsBar({ summary }: { summary: NetworkSummary }) {
       description: "Industrial units currently connected to the network.",
     },
     {
+      label: "Pipelines",
+      value: formatNumber(pipelineSummary.count),
+      valueClassName: "text-cyan-500",
+      description: `Registered pipeline segments in this selection (${formatKilometres(pipelineSummary.totalKm)}).`,
+    },
+    {
       label: "Network length",
-      value: formatKilometres(summary.totalKm),
+      value: formatKilometres(summary.totalKm + pipelineSummary.totalKm),
       valueClassName: "text-primary",
-      description: "Combined length of steel trunk mains and MDPE distribution lines.",
+      description:
+        "Combined length of steel trunk mains, MDPE distribution lines and registered pipelines.",
     },
   ];
 

@@ -67,6 +67,20 @@ export const geographicalAreas: GeographicalArea[] = [
     commercialUnits: 275,
     industrialUnits: 1800,
   },
+  // Added after the Gujarat areas on purpose: the seeded generators below run in this
+  // order, so appending keeps every existing area's boundary, lines and consumers identical.
+  {
+    code: "SLP",
+    name: "Solapur",
+    color: "#ec4899",
+    center: [75.9064, 17.6599],
+    radiusKm: 11,
+    authorizationId: "CGD/MH/SLP/2018-01",
+    authorizedOn: "Jul 2018",
+    domesticConnections: 58400,
+    commercialUnits: 220,
+    industrialUnits: 1400,
+  },
 ];
 
 export function getGeographicalArea(code: string) {
@@ -94,6 +108,17 @@ export const cityGateStations: CityGateStation[] = [
     inletBar: 49,
     outletBar: 19,
     commissionedYear: 2015,
+    status: "online",
+  },
+  {
+    id: "CGS-03",
+    name: "Solapur CGS",
+    gaCode: "SLP",
+    coordinates: [75.835, 17.615],
+    capacityScmh: 60000,
+    inletBar: 49,
+    outletBar: 19,
+    commissionedYear: 2020,
     status: "online",
   },
 ];
@@ -154,7 +179,7 @@ function areaCenter(code: string): LngLat {
 }
 
 function buildSteelRoutes(): PipelineRoute[] {
-  const [narodaCgs, gandhinagarCgs] = cityGateStations;
+  const [narodaCgs, gandhinagarCgs, solapurCgs] = cityGateStations;
   const base = {
     material: "STEEL" as const,
     pressureRating: "MAOP ≥ 19 bar",
@@ -205,6 +230,28 @@ function buildSteelRoutes(): PipelineRoute[] {
       diameterMm: 300,
       installedYear: 2015,
     }),
+    createRoute({
+      ...base,
+      id: "S-06",
+      name: "Solapur CGS – city ring main",
+      gaCode: "SLP",
+      coordinates: bendBetween(solapurCgs.coordinates, areaCenter("SLP"), 0.9),
+      diameterMm: 300,
+      installedYear: 2020,
+    }),
+    createRoute({
+      ...base,
+      id: "S-07",
+      name: "Solapur – Chincholi MIDC trunk main",
+      gaCode: "SLP",
+      coordinates: bendBetween(
+        areaCenter("SLP"),
+        offsetByKm(areaCenter("SLP"), 7, 6),
+        -0.8
+      ),
+      diameterMm: 250,
+      installedYear: 2021,
+    }),
   ];
 }
 
@@ -213,6 +260,7 @@ const mdpeBranchCounts: Record<string, number> = {
   GNR: 6,
   AND: 5,
   KHD: 4,
+  SLP: 5,
 };
 
 function buildMdpeRoutes(): PipelineRoute[] {
@@ -254,7 +302,7 @@ export const pipelineRoutes: PipelineRoute[] = [
   ...buildMdpeRoutes(),
 ];
 
-// ───────────── Industrial consumers (about 15,000 points) ─────────────
+// ───────────── Industrial consumers (about 16,400 points) ─────────────
 
 export function buildIndustrialConsumerFeatures(): ConsumerFeature[] {
   const random = createSeededRandom(2024);
@@ -300,6 +348,18 @@ export function buildNetworkGeoJson(): NetworkGeoJson {
         },
         properties: { code: area.code, name: area.name, color: area.color },
       })),
+    },
+    areaLabels: {
+      type: "FeatureCollection",
+      features: geographicalAreas.map((area) => {
+        const ring = areaBoundaries.get(area.code) ?? [area.center];
+        const top = ring.reduce((highest, point) => (point[1] > highest[1] ? point : highest));
+        return {
+          type: "Feature",
+          geometry: { type: "Point", coordinates: [area.center[0], top[1]] },
+          properties: { code: area.code, name: `${area.name} GA` },
+        };
+      }),
     },
     routes: {
       type: "FeatureCollection",

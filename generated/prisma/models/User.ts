@@ -202,6 +202,8 @@ export type UserWhereInput = {
   accounts?: Prisma.AccountListRelationFilter
   faultReports?: Prisma.FaultReportListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  pipelinesCreated?: Prisma.PipelineListRelationFilter
+  pipelinesUpdated?: Prisma.PipelineListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -216,6 +218,8 @@ export type UserOrderByWithRelationInput = {
   accounts?: Prisma.AccountOrderByRelationAggregateInput
   faultReports?: Prisma.FaultReportOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  pipelinesCreated?: Prisma.PipelineOrderByRelationAggregateInput
+  pipelinesUpdated?: Prisma.PipelineOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -233,6 +237,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   accounts?: Prisma.AccountListRelationFilter
   faultReports?: Prisma.FaultReportListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  pipelinesCreated?: Prisma.PipelineListRelationFilter
+  pipelinesUpdated?: Prisma.PipelineListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -273,6 +279,8 @@ export type UserCreateInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -287,6 +295,8 @@ export type UserUncheckedCreateInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUpdateInput = {
@@ -301,6 +311,8 @@ export type UserUpdateInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -315,6 +327,8 @@ export type UserUncheckedUpdateInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -380,6 +394,11 @@ export type UserMinOrderByAggregateInput = {
 export type UserScalarRelationFilter = {
   is?: Prisma.UserWhereInput
   isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type StringFieldUpdateOperationsInput = {
@@ -454,6 +473,38 @@ export type UserUpdateOneRequiredWithoutNotificationsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationsInput, Prisma.UserUpdateWithoutNotificationsInput>, Prisma.UserUncheckedUpdateWithoutNotificationsInput>
 }
 
+export type UserCreateNestedOneWithoutPipelinesCreatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPipelinesCreatedInput, Prisma.UserUncheckedCreateWithoutPipelinesCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPipelinesCreatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutPipelinesUpdatedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedCreateWithoutPipelinesUpdatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPipelinesUpdatedInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutPipelinesCreatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPipelinesCreatedInput, Prisma.UserUncheckedCreateWithoutPipelinesCreatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPipelinesCreatedInput
+  upsert?: Prisma.UserUpsertWithoutPipelinesCreatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPipelinesCreatedInput, Prisma.UserUpdateWithoutPipelinesCreatedInput>, Prisma.UserUncheckedUpdateWithoutPipelinesCreatedInput>
+}
+
+export type UserUpdateOneWithoutPipelinesUpdatedNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedCreateWithoutPipelinesUpdatedInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPipelinesUpdatedInput
+  upsert?: Prisma.UserUpsertWithoutPipelinesUpdatedInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPipelinesUpdatedInput, Prisma.UserUpdateWithoutPipelinesUpdatedInput>, Prisma.UserUncheckedUpdateWithoutPipelinesUpdatedInput>
+}
+
 export type UserCreateWithoutSessionsInput = {
   id: string
   name: string
@@ -465,6 +516,8 @@ export type UserCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -478,6 +531,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -507,6 +562,8 @@ export type UserUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -520,6 +577,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserCreateWithoutAccountsInput = {
@@ -533,6 +592,8 @@ export type UserCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -546,6 +607,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -575,6 +638,8 @@ export type UserUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -588,6 +653,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserCreateWithoutFaultReportsInput = {
@@ -601,6 +668,8 @@ export type UserCreateWithoutFaultReportsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateWithoutFaultReportsInput = {
@@ -614,6 +683,8 @@ export type UserUncheckedCreateWithoutFaultReportsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserCreateOrConnectWithoutFaultReportsInput = {
@@ -643,6 +714,8 @@ export type UserUpdateWithoutFaultReportsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFaultReportsInput = {
@@ -656,6 +729,8 @@ export type UserUncheckedUpdateWithoutFaultReportsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -669,6 +744,8 @@ export type UserCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -682,6 +759,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
   faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -711,6 +790,8 @@ export type UserUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -724,6 +805,160 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
   faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
+}
+
+export type UserCreateWithoutPipelinesCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesUpdated?: Prisma.PipelineCreateNestedManyWithoutUpdatedByInput
+}
+
+export type UserUncheckedCreateWithoutPipelinesCreatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedCreateNestedManyWithoutUpdatedByInput
+}
+
+export type UserCreateOrConnectWithoutPipelinesCreatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPipelinesCreatedInput, Prisma.UserUncheckedCreateWithoutPipelinesCreatedInput>
+}
+
+export type UserCreateWithoutPipelinesUpdatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  faultReports?: Prisma.FaultReportCreateNestedManyWithoutReportedByInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutPipelinesUpdatedInput = {
+  id: string
+  name: string
+  email: string
+  emailVerified?: boolean
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  faultReports?: Prisma.FaultReportUncheckedCreateNestedManyWithoutReportedByInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pipelinesCreated?: Prisma.PipelineUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutPipelinesUpdatedInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedCreateWithoutPipelinesUpdatedInput>
+}
+
+export type UserUpsertWithoutPipelinesCreatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPipelinesCreatedInput, Prisma.UserUncheckedUpdateWithoutPipelinesCreatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPipelinesCreatedInput, Prisma.UserUncheckedCreateWithoutPipelinesCreatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPipelinesCreatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPipelinesCreatedInput, Prisma.UserUncheckedUpdateWithoutPipelinesCreatedInput>
+}
+
+export type UserUpdateWithoutPipelinesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesUpdated?: Prisma.PipelineUpdateManyWithoutUpdatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPipelinesCreatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesUpdated?: Prisma.PipelineUncheckedUpdateManyWithoutUpdatedByNestedInput
+}
+
+export type UserUpsertWithoutPipelinesUpdatedInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedUpdateWithoutPipelinesUpdatedInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedCreateWithoutPipelinesUpdatedInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPipelinesUpdatedInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPipelinesUpdatedInput, Prisma.UserUncheckedUpdateWithoutPipelinesUpdatedInput>
+}
+
+export type UserUpdateWithoutPipelinesUpdatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  faultReports?: Prisma.FaultReportUpdateManyWithoutReportedByNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPipelinesUpdatedInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  faultReports?: Prisma.FaultReportUncheckedUpdateManyWithoutReportedByNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pipelinesCreated?: Prisma.PipelineUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 
@@ -736,6 +971,8 @@ export type UserCountOutputType = {
   accounts: number
   faultReports: number
   notifications: number
+  pipelinesCreated: number
+  pipelinesUpdated: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -743,6 +980,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   accounts?: boolean | UserCountOutputTypeCountAccountsArgs
   faultReports?: boolean | UserCountOutputTypeCountFaultReportsArgs
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
+  pipelinesCreated?: boolean | UserCountOutputTypeCountPipelinesCreatedArgs
+  pipelinesUpdated?: boolean | UserCountOutputTypeCountPipelinesUpdatedArgs
 }
 
 /**
@@ -783,6 +1022,20 @@ export type UserCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Ty
   where?: Prisma.NotificationWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPipelinesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PipelineWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPipelinesUpdatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PipelineWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -796,6 +1049,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   faultReports?: boolean | Prisma.User$faultReportsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  pipelinesCreated?: boolean | Prisma.User$pipelinesCreatedArgs<ExtArgs>
+  pipelinesUpdated?: boolean | Prisma.User$pipelinesUpdatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -835,6 +1090,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
   faultReports?: boolean | Prisma.User$faultReportsArgs<ExtArgs>
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
+  pipelinesCreated?: boolean | Prisma.User$pipelinesCreatedArgs<ExtArgs>
+  pipelinesUpdated?: boolean | Prisma.User$pipelinesUpdatedArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -847,6 +1104,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     accounts: Prisma.$AccountPayload<ExtArgs>[]
     faultReports: Prisma.$FaultReportPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    pipelinesCreated: Prisma.$PipelinePayload<ExtArgs>[]
+    pipelinesUpdated: Prisma.$PipelinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1254,6 +1513,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   accounts<T extends Prisma.User$accountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   faultReports<T extends Prisma.User$faultReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$faultReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FaultReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pipelinesCreated<T extends Prisma.User$pipelinesCreatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pipelinesCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PipelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  pipelinesUpdated<T extends Prisma.User$pipelinesUpdatedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pipelinesUpdatedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PipelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1776,6 +2037,54 @@ export type User$notificationsArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * User.pipelinesCreated
+ */
+export type User$pipelinesCreatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pipeline
+   */
+  select?: Prisma.PipelineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pipeline
+   */
+  omit?: Prisma.PipelineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineInclude<ExtArgs> | null
+  where?: Prisma.PipelineWhereInput
+  orderBy?: Prisma.PipelineOrderByWithRelationInput | Prisma.PipelineOrderByWithRelationInput[]
+  cursor?: Prisma.PipelineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PipelineScalarFieldEnum | Prisma.PipelineScalarFieldEnum[]
+}
+
+/**
+ * User.pipelinesUpdated
+ */
+export type User$pipelinesUpdatedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Pipeline
+   */
+  select?: Prisma.PipelineSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Pipeline
+   */
+  omit?: Prisma.PipelineOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PipelineInclude<ExtArgs> | null
+  where?: Prisma.PipelineWhereInput
+  orderBy?: Prisma.PipelineOrderByWithRelationInput | Prisma.PipelineOrderByWithRelationInput[]
+  cursor?: Prisma.PipelineWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PipelineScalarFieldEnum | Prisma.PipelineScalarFieldEnum[]
 }
 
 /**
